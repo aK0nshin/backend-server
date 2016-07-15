@@ -16,10 +16,7 @@ class MainController extends BaseController
     {
         $news = News::find($id);
         $news->creator;
-        $relatedIds = DB::table('news_news')
-            ->where('news_id', $id)
-            ->pluck('related_news');
-        $news->relatedNews = $relatedIds;
+        $news->relatedNews = $news->relatedIds;
         $news->lastEditor;
         $news->image;
         $news->status;
@@ -38,10 +35,7 @@ class MainController extends BaseController
 
             foreach ($news as $n) {
                 $n->creator;
-                $relatedIds = DB::table('news_news')
-                    ->where('news_id', $n->id)
-                    ->pluck('related_news');
-                $n->relatedNews = $relatedIds;
+                $n->relatedNews = $n->relatedIds;
                 $n->lastEditor;
                 $n->image;
                 $n->status;
