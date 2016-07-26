@@ -1,0 +1,2137 @@
+FORMAT: 1A
+HOST: http://mir24.ru/api/v1
+
+# mir24
+
+Документация к  апи сервера мир24.
+
+## Общие [/]
+
+### ✔ Получить массив дополнительной информации [POST /additions]
+
+Получает JSON с полями. Возвращает массив запрошенных полей
+
++ Request (application/json)
+
+        [
+            "branches",
+            "geotags",
+            "supertags",
+            "copyrights"
+        ]
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "branches" : { 
+                    "22": {
+                        "id": 22,
+                        "value": "Казахстан",
+                    },
+                    "23": {
+                        "id": 23,
+                        "value": "Беларусь",
+                    },
+                    "24": {
+                        "id": 24,
+                        "value": "Грузия",
+                    "25": {
+                        "id": 25,
+                        "value": "Кыргызстан"
+                    }
+                },
+                "geotags" : { 
+                    "32": {
+                        "id": 32,
+                        "value": "США и Канада",
+                    },
+                    "33": {
+                        "id": 33,
+                        "value": "Латинская Америка",
+                    },
+                    "34": {
+                        "id": 34,
+                        "value": "Австралия и океания",
+                    "35": {
+                        "id": 35,
+                        "value": "Кыргызстан"
+                    }
+                },
+                "supertags" : { 
+                    "42": {
+                        "id": 42,
+                        "value": "Кухни мира",
+                    },
+                    "43": {
+                        "id": 43,
+                        "value": "Культура",
+                    },
+                    "44": {
+                        "id": 44,
+                        "value": "Спорт",
+                    "45": {
+                        "id": 45,
+                        "value": "Путеводитель"
+                    }
+                },
+                "copyrights": {
+                    "1": {
+                        id:1,
+                        origin: '© Фото: «Мир24»',
+                        author: [
+                            'Мария Чегляева',
+                            'Сергей Минеев',
+                            'Максим Кулачков',
+                            'Алан Кациев',
+                            'Татьяна Константинова',
+                            'Татьяна Рублева',
+                            'Алексей Верпека',
+                            'Дмитрий Белицкий',
+                            'Виталий Залесский',
+                            'Анна Тимошенко',
+                            'Владимир Свояченко',
+                            'Дмитрий Светлов',
+                            'Петр Королев',
+                            'Елена Андреева',
+                            'Елизавета Шагалова',
+                            'Елена Карташова'
+                        ],
+                        href:''
+                    },
+                    "2": {
+                        id:2,
+                        origin: '© Фото: ТАСС',
+                        author: [],
+                        href:''
+                    },
+                    "3": {
+                        id:3,
+                        origin: '© Фото: NASA',
+                        author: [],
+                        href:'https://www.nasa.gov/'
+                    },
+                    "4": {
+                        id:4,
+                        origin: 'Фото: Официальный сайт Госдумы',
+                        author: [],
+                        href:'http://duma.gov.ru/'
+                    },
+                    "5": {
+                        id:5,
+                        origin: 'Фото: Официальный сайт правительства РФ',
+                        author: [],
+                        href:'http://government.ru'
+                    },
+                    "6": {
+                        id:6,
+                        origin: 'Фото: Сайт правительства РФ',
+                        author: [],
+                        href:'http://premier.gov.ru/'
+                    },
+                    "7": {
+                        id:7,
+                        origin: 'Фото: Пресс-служба президента РФ',
+                        author: [],
+                        href:'http://kremlin.ru/'
+                    },
+                    "8": {
+                        id:8,
+                        origin: 'Фото: МЧС России',
+                        author: [],
+                        href:'http://www.mchs.gov.ru/'
+                    },
+                    "9": {
+                        id:9,
+                        origin: 'Фото: ГАЗПРОМ',
+                        author: [],
+                        href:'http://gazprom.ru'
+                    },
+                    "10": {
+                        id:10,
+                        origin: 'Фото: Министерство обороны РФ',
+                        author: [],
+                        href:'http://mil.ru/'
+                    },
+                    "11": {
+                        id:11,
+                        origin: 'Фото: РОСКОСМОС',
+                        author: [],
+                        href:'http://www.federalspace.ru/'
+                    },
+                    "12": {
+                        id:12,
+                        origin: 'Фото: Официальный сайт ГУ МВД по г.Москве',
+                        author: [],
+                        href:'http://petrovka38.ru/'
+                    },
+                    "13": {
+                        id:13,
+                        origin: '© Фото: РИА Новости',
+                        author: [],
+                        href:''
+                    }
+                }
+            }
+
+### Получить источники к статье, новости, фотоленте и видеосюжету [GET /sources]
+
+Возвращает ассоциативный массив источников
+
++ Response 200 (application/json)
+        
+        {
+            "1": {
+                    href: "www.google.com",
+                    name: "Google"
+                },
+            "2": {
+                    href: "www.yandex.ru",
+                    name: "Yandex"
+                }
+        }
+        
+### Поиск по статьям, сюжетам, новостям, фотолентам и видеосюжетам [POST /relatedSearch]
+
+Принимает ассоциативный массив или строку. Возвращает ассоциативный массив новостей, сюжетов, статей, фотолент и видеосюжетов в title которых входит принятая подстрока.
+
++ Request (application/json)
+
+        {
+            "open": false,
+            "deleted": false,
+            "active": false,
+            "inactive": false,
+            "embargo":false,
+            "string": "картофель",
+            "name": false,
+            "supertag": false,
+            "creator": false,
+            "lastRedactor": false,
+            "videoLoader": false,
+            "photoLoader": false,
+            "date": "2016-07-28",
+            "time": "18:25:05",
+        }
+
++ Response 200 (application/json)
+
+           {
+               "12744": {
+                "status": "active",
+               "views": 1885,
+               "author": "Prof. Ben Renner II",
+               "main_center": false,
+               "main_top": false,
+               "rubric_top": false,
+               "lightning": false,
+               "promo": false,
+               "embargo": 634912200,
+               "title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+               "seo_title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+               "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderRerum sed atque voluptate dolorem et velit.",
+               "text": "Repudiandae et amet numqus non.",
+               "topic_id": 10,
+               "topic_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+               "related_news": [5435,2345,3654,4674],
+               "related_video_articles": [3451,2435,3543,4654],
+               "related_articles": [2341,2432,3565,4768],
+               "related_galleries": [1775,6782,5763,4676],
+               "video_src": "http:\/\/path.com",
+               "remove_after_36": false,
+               "last_edit_by": "ultrices.a@nonjusto.ca",
+               "created_by": "millie.zieme@example.net",
+               "country_top": false,
+               "created": 634912200,
+               "updated": 634912200,
+               "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+               "img_title": "dolor",
+               "img_alt": "Error quod cum sunt rem. Nobis maioreem.",
+               "supertag": 16,
+               "copyright_origin": "Saepe aut qui eum beatae delectus. Aum sit magnam.",
+               "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+               "copyright_link": "Et possimus quas consequatur qui optio. Maxime abo.",
+               "geotag": 0,
+               "branches": [16],
+               "tags": [],
+               "last_edit_date": 634912200,
+               "last_edit_time": 634912200,
+               "last_edit_video_by": "ultrices.a@nonjusto.ca",
+               "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+            },
+              "12745": {
+                "status": "active",
+               "views": 1885,
+               "author": "Prof. Ben Renner II",
+               "main_center": false,
+               "main_top": false,
+               "rubric_top": false,
+               "lightning": false,
+               "promo": false,
+               "embargo": 634912200,
+               "title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+               "seo_title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+               "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderRerum sed atque voluptate dolorem et velit.",
+               "text": "Repudiandae et amet numqus non.",
+               "topic_id": 10,
+               "topic_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+               "related_news": [5435,2345,3654,4674],
+               "related_video_articles": [3451,2435,3543,4654],
+               "related_articles": [2341,2432,3565,4768],
+               "related_galleries": [1775,6782,5763,4676],
+               "video_src": "http:\/\/path.com",
+               "remove_after_36": false,
+               "last_edit_by": "ultrices.a@nonjusto.ca",
+               "created_by": "millie.zieme@example.net",
+               "country_top": false,
+               "created": 634912200,
+               "updated": 634912200,
+               "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+               "img_title": "dolor",
+               "img_alt": "Error quod cum sunt rem. Nobis maioreem.",
+               "supertag": 16,
+               "copyright_origin": "Saepe aut qui eum beatae delectus. Aum sit magnam.",
+               "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+               "copyright_link": "Et possimus quas consequatur qui optio. Maxime abo.",
+               "geotag": 0,
+               "branches": [16],
+               "tags": [],
+               "last_edit_date": 634912200,
+               "last_edit_time": 634912200,
+               "last_edit_video_by": "ultrices.a@nonjusto.ca",
+               "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+            }
+          }
+          
+### ✔ Удалить модель [PUT /deleteHardCautionDontTouchThis]
+
+Принимает название модели и id записи, кроторую надо удалить.
+
++ Request (application/json)
+
+        {
+            "news":  "21"
+        }
+
++ Response 200 (application/json)
+
+            {
+                "Job": "is done"
+            }
+
+## Все модели All [/all]
+
+### ✔ Получить ассоциативные массивы запрошенных  сущностей [POST /all/mass]
+
+Принимает ассоциативный массив. Ключи - имена сущностей. Значения - массивы id
+
++ Request (application/json)
+
+            {
+                "news": [1,2,3],
+                "articles": [1,2,3],
+                "videostories": [],
+                "galleries":[1,2,3]
+            }
+
++ Response 200 (application/json)
+
+    + Body
+    
+                {
+                "news": {
+                    "1": {
+                        "status": "active",
+                       "views": 1885,
+                       "author": "Prof. Ben Renner II",
+                       "main_center": false,
+                       "main_top": false,
+                       "rubric_top": false,
+                       "lightning": false,
+                       "promo": false,
+                       "embargo": 634912200,
+                       "title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+                       "seo_title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+                       "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderRerum sed atque voluptate dolorem et velit.",
+                       "text": "Repudiandae et amet numqus non.",
+                       "topic_id": 10,
+                       "topic_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+                       "related_news": [5435,2345,3654,4674],
+                       "related_video_articles": [3451,2435,3543,4654],
+                       "related_articles": [2341,2432,3565,4768],
+                       "related_galleries": [1775,6782,5763,4676],
+                       "video_src": "http:\/\/path.com",
+                       "remove_after_36": false,
+                       "last_edit_by": "ultrices.a@nonjusto.ca",
+                       "created_by": "millie.zieme@example.net",
+                       "country_top": false,
+                       "created": 634912200,
+                       "updated": 634912200,
+                       "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+                       "img_title": "dolor",
+                       "img_alt": "Error quod cum sunt rem. Nobis maioreem.",
+                       "supertag": 16,
+                       "copyright_origin": "Saepe aut qui eum beatae delectus. Aum sit magnam.",
+                       "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+                       "copyright_link": "Et possimus quas consequatur qui optio. Maxime abo.",
+                       "geotag": 0,
+                       "branches": [16],
+                       "tags": [],
+                       "last_edit_date": 634912200,
+                       "last_edit_time": 634912200,
+                       "last_edit_video_by": "ultrices.a@nonjusto.ca",
+                       "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+                    },
+                    "2": {
+                        "id": 2,
+                        "status": "active",
+                       "views": 1885,
+                       "author": "Prof. Ben Renner II",
+                       "main_center": false,
+                       "main_top": false,
+                       "rubric_top": false,
+                       "lightning": false,
+                       "promo": false,
+                       "embargo": 634912200,
+                       "title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+                       "seo_title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+                       "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderRerum sed atque voluptate dolorem et velit.",
+                       "text": "Repudiandae et amet numqus non.",
+                       "topic_id": 10,
+                       "topic_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+                       "related_news": [5435,2345,3654,4674],
+                       "related_video_articles": [3451,2435,3543,4654],
+                       "related_articles": [2341,2432,3565,4768],
+                       "related_galleries": [1775,6782,5763,4676],
+                       "video_src": "http:\/\/path.com",
+                       "remove_after_36": false,
+                       "last_edit_by": "ultrices.a@nonjusto.ca",
+                       "created_by": "millie.zieme@example.net",
+                       "country_top": false,
+                       "created": 634912200,
+                       "updated": 634912200,
+                       "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+                       "img_title": "dolor",
+                       "img_alt": "Error quod cum sunt rem. Nobis maioreem.",
+                       "supertag": 16,
+                       "copyright_origin": "Saepe aut qui eum beatae delectus. Aum sit magnam.",
+                       "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+                       "copyright_link": "Et possimus quas consequatur qui optio. Maxime abo.",
+                       "geotag": 0,
+                       "branches": [16],
+                       "tags": [],
+                       "last_edit_date": 634912200,
+                       "last_edit_time": 634912200,
+                       "last_edit_video_by": "ultrices.a@nonjusto.ca",
+                       "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+                    },
+                    "3": {
+                        "status": "active",
+                       "views": 1885,
+                       "author": "Prof. Ben Renner II",
+                       "main_center": false,
+                       "main_top": false,
+                       "rubric_top": false,
+                       "lightning": false,
+                       "promo": false,
+                       "embargo": 634912200,
+                       "title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+                       "seo_title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+                       "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderRerum sed atque voluptate dolorem et velit.",
+                       "text": "Repudiandae et amet numqus non.",
+                       "topic_id": 10,
+                       "topic_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+                       "related_news": [5435,2345,3654,4674],
+                       "related_video_articles": [3451,2435,3543,4654],
+                       "related_articles": [2341,2432,3565,4768],
+                       "related_galleries": [1775,6782,5763,4676],
+                       "video_src": "http:\/\/path.com",
+                       "remove_after_36": false,
+                       "last_edit_by": "ultrices.a@nonjusto.ca",
+                       "created_by": "millie.zieme@example.net",
+                       "country_top": false,
+                       "created": 634912200,
+                       "updated": 634912200,
+                       "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+                       "img_title": "dolor",
+                       "img_alt": "Error quod cum sunt rem. Nobis maioreem.",
+                       "supertag": 16,
+                       "copyright_origin": "Saepe aut qui eum beatae delectus. Aum sit magnam.",
+                       "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+                       "copyright_link": "Et possimus quas consequatur qui optio. Maxime abo.",
+                       "geotag": 0,
+                       "branches": [16],
+                       "tags": [],
+                       "last_edit_date": 634912200,
+                       "last_edit_time": 634912200,
+                       "last_edit_video_by": "ultrices.a@nonjusto.ca",
+                       "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+                    }
+                },
+                "articles": {
+                    "1": {
+                        "status": "active",
+                       "views": 1885,
+                       "author": "Prof. Ben Renner II",
+                       "main_center": false,
+                       "main_top": false,
+                       "rubric_top": false,
+                       "lightning": false,
+                       "promo": false,
+                       "embargo": 634912200,
+                       "title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+                       "seo_title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+                       "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderRerum sed atque voluptate dolorem et velit.",
+                       "text": "Repudiandae et amet numqus non.",
+                       "topic_id": 10,
+                       "topic_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+                       "related_news": [5435,2345,3654,4674],
+                       "related_video_articles": [3451,2435,3543,4654],
+                       "related_articles": [2341,2432,3565,4768],
+                       "related_galleries": [1775,6782,5763,4676],
+                       "video_src": "http:\/\/path.com",
+                       "remove_after_36": false,
+                       "last_edit_by": "ultrices.a@nonjusto.ca",
+                       "created_by": "millie.zieme@example.net",
+                       "country_top": false,
+                       "created": 634912200,
+                       "updated": 634912200,
+                       "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+                       "img_title": "dolor",
+                       "img_alt": "Error quod cum sunt rem. Nobis maioreem.",
+                       "supertag": 16,
+                       "copyright_origin": "Saepe aut qui eum beatae delectus. Aum sit magnam.",
+                       "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+                       "copyright_link": "Et possimus quas consequatur qui optio. Maxime abo.",
+                       "geotag": 0,
+                       "branches": [16],
+                       "tags": [],
+                       "last_edit_date": 634912200,
+                       "last_edit_time": 634912200,
+                       "last_edit_video_by": "ultrices.a@nonjusto.ca",
+                       "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+                    },
+                    "2": {
+                        "id": 2,
+                        "status": "active",
+                       "views": 1885,
+                       "author": "Prof. Ben Renner II",
+                       "main_center": false,
+                       "main_top": false,
+                       "rubric_top": false,
+                       "lightning": false,
+                       "promo": false,
+                       "embargo": 634912200,
+                       "title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+                       "seo_title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+                       "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderRerum sed atque voluptate dolorem et velit.",
+                       "text": "Repudiandae et amet numqus non.",
+                       "topic_id": 10,
+                       "topic_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+                       "related_news": [5435,2345,3654,4674],
+                       "related_video_articles": [3451,2435,3543,4654],
+                       "related_articles": [2341,2432,3565,4768],
+                       "related_galleries": [1775,6782,5763,4676],
+                       "video_src": "http:\/\/path.com",
+                       "remove_after_36": false,
+                       "last_edit_by": "ultrices.a@nonjusto.ca",
+                       "created_by": "millie.zieme@example.net",
+                       "country_top": false,
+                       "created": 634912200,
+                       "updated": 634912200,
+                       "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+                       "img_title": "dolor",
+                       "img_alt": "Error quod cum sunt rem. Nobis maioreem.",
+                       "supertag": 16,
+                       "copyright_origin": "Saepe aut qui eum beatae delectus. Aum sit magnam.",
+                       "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+                       "copyright_link": "Et possimus quas consequatur qui optio. Maxime abo.",
+                       "geotag": 0,
+                       "branches": [16],
+                       "tags": [],
+                       "last_edit_date": 634912200,
+                       "last_edit_time": 634912200,
+                       "last_edit_video_by": "ultrices.a@nonjusto.ca",
+                       "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+                    },
+                    "3": {
+                        "id": 3,
+                       "status": "active",
+                       "views": 1885,
+                       "author": "Prof. Ben Renner II",
+                       "main_center": false,
+                       "main_top": false,
+                       "rubric_top": false,
+                       "lightning": false,
+                       "promo": false,
+                       "embargo": 634912200,
+                       "title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+                       "seo_title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+                       "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderRerum sed atque voluptate dolorem et velit.",
+                       "text": "Repudiandae et amet numqus non.",
+                       "topic_id": 10,
+                       "topic_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+                       "related_news": [5435,2345,3654,4674],
+                       "related_video_articles": [3451,2435,3543,4654],
+                       "related_articles": [2341,2432,3565,4768],
+                       "related_galleries": [1775,6782,5763,4676],
+                       "video_src": "http:\/\/path.com",
+                       "remove_after_36": false,
+                       "last_edit_by": "ultrices.a@nonjusto.ca",
+                       "created_by": "millie.zieme@example.net",
+                       "country_top": false,
+                       "created": 634912200,
+                       "updated": 634912200,
+                       "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+                       "img_title": "dolor",
+                       "img_alt": "Error quod cum sunt rem. Nobis maioreem.",
+                       "supertag": 16,
+                       "copyright_origin": "Saepe aut qui eum beatae delectus. Aum sit magnam.",
+                       "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+                       "copyright_link": "Et possimus quas consequatur qui optio. Maxime abo.",
+                       "geotag": 0,
+                       "branches": [16],
+                       "tags": [],
+                       "last_edit_date": 634912200,
+                       "last_edit_time": 634912200,
+                       "last_edit_video_by": "ultrices.a@nonjusto.ca",
+                       "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+                    }
+                },
+                "videostories": null,
+                "galleries": {
+                    "1": {
+                        "id": 1,
+                        "status": "active",
+                       "views": 1885,
+                       "author": "Prof. Ben Renner II",
+                       "main_center": false,
+                       "main_top": false,
+                       "rubric_top": false,
+                       "lightning": false,
+                       "promo": false,
+                       "embargo": 634912200,
+                       "title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+                       "seo_title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+                       "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderRerum sed atque voluptate dolorem et velit.",
+                       "text": "Repudiandae et amet numqus non.",
+                       "topic_id": 10,
+                       "topic_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+                       "related_news": [5435,2345,3654,4674],
+                       "related_video_articles": [3451,2435,3543,4654],
+                       "related_articles": [2341,2432,3565,4768],
+                       "related_galleries": [1775,6782,5763,4676],
+                       "video_src": "http:\/\/path.com",
+                       "remove_after_36": false,
+                       "last_edit_by": "ultrices.a@nonjusto.ca",
+                       "created_by": "millie.zieme@example.net",
+                       "country_top": false,
+                       "created": 634912200,
+                       "updated": 634912200,
+                       "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+                       "img_title": "dolor",
+                       "img_alt": "Error quod cum sunt rem. Nobis maioreem.",
+                       "supertag": 16,
+                       "copyright_origin": "Saepe aut qui eum beatae delectus. Aum sit magnam.",
+                       "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+                       "copyright_link": "Et possimus quas consequatur qui optio. Maxime abo.",
+                       "geotag": 0,
+                       "branches": [16],
+                       "tags": [],
+                       "last_edit_date": 634912200,
+                       "last_edit_time": 634912200,
+                       "last_edit_video_by": "ultrices.a@nonjusto.ca",
+                       "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+                    },
+                    "2": {
+                        "id": 2,
+                        "status": "active",
+                       "views": 1885,
+                       "author": "Prof. Ben Renner II",
+                       "main_center": false,
+                       "main_top": false,
+                       "rubric_top": false,
+                       "lightning": false,
+                       "promo": false,
+                       "embargo": 634912200,
+                       "title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+                       "seo_title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+                       "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderRerum sed atque voluptate dolorem et velit.",
+                       "text": "Repudiandae et amet numqus non.",
+                       "topic_id": 10,
+                       "topic_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+                       "related_news": [5435,2345,3654,4674],
+                       "related_video_articles": [3451,2435,3543,4654],
+                       "related_articles": [2341,2432,3565,4768],
+                       "related_galleries": [1775,6782,5763,4676],
+                       "video_src": "http:\/\/path.com",
+                       "remove_after_36": false,
+                       "last_edit_by": "ultrices.a@nonjusto.ca",
+                       "created_by": "millie.zieme@example.net",
+                       "country_top": false,
+                       "created": 634912200,
+                       "updated": 634912200,
+                       "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+                       "img_title": "dolor",
+                       "img_alt": "Error quod cum sunt rem. Nobis maioreem.",
+                       "supertag": 16,
+                       "copyright_origin": "Saepe aut qui eum beatae delectus. Aum sit magnam.",
+                       "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+                       "copyright_link": "Et possimus quas consequatur qui optio. Maxime abo.",
+                       "geotag": 0,
+                       "branches": [16],
+                       "tags": [],
+                       "last_edit_date": 634912200,
+                       "last_edit_time": 634912200,
+                       "last_edit_video_by": "ultrices.a@nonjusto.ca",
+                       "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+                    },
+                    "3": {
+                        "id": 3,
+                        "status": "active",
+                       "views": 1885,
+                       "author": "Prof. Ben Renner II",
+                       "main_center": false,
+                       "main_top": false,
+                       "rubric_top": false,
+                       "lightning": false,
+                       "promo": false,
+                       "embargo": 634912200,
+                       "title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+                       "seo_title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+                       "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderRerum sed atque voluptate dolorem et velit.",
+                       "text": "Repudiandae et amet numqus non.",
+                       "topic_id": 10,
+                       "topic_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+                       "related_news": [5435,2345,3654,4674],
+                       "related_video_articles": [3451,2435,3543,4654],
+                       "related_articles": [2341,2432,3565,4768],
+                       "related_galleries": [1775,6782,5763,4676],
+                       "video_src": "http:\/\/path.com",
+                       "remove_after_36": false,
+                       "last_edit_by": "ultrices.a@nonjusto.ca",
+                       "created_by": "millie.zieme@example.net",
+                       "country_top": false,
+                       "created": 634912200,
+                       "updated": 634912200,
+                       "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+                       "img_title": "dolor",
+                       "img_alt": "Error quod cum sunt rem. Nobis maioreem.",
+                       "supertag": 16,
+                       "copyright_origin": "Saepe aut qui eum beatae delectus. Aum sit magnam.",
+                       "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+                       "copyright_link": "Et possimus quas consequatur qui optio. Maxime abo.",
+                       "geotag": 0,
+                       "branches": [16],
+                       "tags": [],
+                       "last_edit_date": 634912200,
+                       "last_edit_time": 634912200,
+                       "last_edit_video_by": "ultrices.a@nonjusto.ca",
+                       "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+                    }
+                }
+            }
+
+## Статья Article [/article]
+
+### Получить статью по id [GET /article/{id}]
+
++ Parameters
+
+    + id: 12 (number) - id требуемой  статьи
+
++ Response 200 (application/json)
+
+            {
+                "id": "12",
+                "status": "active",
+               "views": 1885,
+               "author": "Prof. Ben Renner II",
+               "main_center": false,
+               "main_top": false,
+               "rubric_top": false,
+               "lightning": false,
+               "promo": false,
+               "embargo": 634912200,
+               "title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+               "seo_title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+               "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderRerum sed atque voluptate dolorem et velit.",
+               "text": "Repudiandae et amet numqus non.",
+               "topic_id": 10,
+               "topic_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+               "related_news": [5435,2345,3654,4674],
+               "related_video_articles": [3451,2435,3543,4654],
+               "related_articles": [2341,2432,3565,4768],
+               "related_galleries": [1775,6782,5763,4676],
+               "video_src": "http:\/\/path.com",
+               "remove_after_36": false,
+               "last_edit_by": "ultrices.a@nonjusto.ca",
+               "created_by": "millie.zieme@example.net",
+               "country_top": false,
+               "created": 634912200,
+               "updated": 634912200,
+               "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+               "img_title": "dolor",
+               "img_alt": "Error quod cum sunt rem. Nobis maioreem.",
+               "supertag": 16,
+               "copyright_origin": "Saepe aut qui eum beatae delectus. Aum sit magnam.",
+               "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+               "copyright_link": "Et possimus quas consequatur qui optio. Maxime abo.",
+               "geotag": 0,
+               "branches": [16],
+               "tags": [],
+               "last_edit_date": 634912200,
+               "last_edit_time": 634912200,
+               "last_edit_video_by": "ultrices.a@nonjusto.ca",
+               "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+            }
+
+### Получить массив статей [GET /article/{limit}/{offset}]
+
++ Parameters
+
+    + limit: 10 (number) - Лимит статей
+    + offset: 0 (number) - Смещение статей
+
++ Response 200 (application/json)
+
+            {
+                "data": {
+                    "12744" : {
+                    "id": 12744,
+                     "status": "active",
+               "views": 1885,
+               "author": "Prof. Ben Renner II",
+               "main_center": false,
+               "main_top": false,
+               "rubric_top": false,
+               "lightning": false,
+               "promo": false,
+               "embargo": 634912200,
+               "title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+               "seo_title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+               "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderRerum sed atque voluptate dolorem et velit.",
+               "text": "Repudiandae et amet numqus non.",
+               "story_id": 10,
+               "story_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+               "related_news": [5435,2345,3654,4674],
+               "related_video_articles": [3451,2435,3543,4654],
+               "related_articles": [2341,2432,3565,4768],
+               "related_galleries": [1775,6782,5763,4676],
+               "video_src": "http:\/\/path.com",
+               "remove_after_36": false,
+               "last_edit_by": "ultrices.a@nonjusto.ca",
+               "created_by": "millie.zieme@example.net",
+               "country_top": false,
+               "created": 634912200,
+               "updated": 634912200,
+               "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+               "img_title": "dolor",
+               "img_alt": "Error quod cum sunt rem. Nobis maioreem.",
+               "supertag": 16,
+               "copyright_origin": "Saepe aut qui eum beatae delectus. Aum sit magnam.",
+               "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+               "copyright_link": "Et possimus quas consequatur qui optio. Maxime abo.",
+               "geotag": 0,
+               "branches": [16],
+               "tags": [],
+               "last_edit_date": 634912200,
+               "last_edit_time": 634912200,
+               "last_edit_video_by": "ultrices.a@nonjusto.ca",
+               "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+                },
+                  "12745" : {
+                    "id": 12745,
+                     "status": "active",
+               "views": 1885,
+               "author": "Prof. Ben Renner II",
+               "main_center": false,
+               "main_top": false,
+               "rubric_top": false,
+               "lightning": false,
+               "promo": false,
+               "embargo": 634912200,
+               "title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+               "seo_title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+               "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderRerum sed atque voluptate dolorem et velit.",
+               "text": "Repudiandae et amet numqus non.",
+               "story_id": 10,
+               "story_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+               "related_news": [5435,2345,3654,4674],
+               "related_video_articles": [3451,2435,3543,4654],
+               "related_articles": [2341,2432,3565,4768],
+               "related_galleries": [1775,6782,5763,4676],
+               "video_src": "http:\/\/path.com",
+               "remove_after_36": false,
+               "last_edit_by": "ultrices.a@nonjusto.ca",
+               "created_by": "millie.zieme@example.net",
+               "country_top": false,
+               "created": 634912200,
+               "updated": 634912200,
+               "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+               "img_title": "dolor",
+               "img_alt": "Error quod cum sunt rem. Nobis maioreem.",
+               "supertag": 16,
+               "copyright_origin": "Saepe aut qui eum beatae delectus. Aum sit magnam.",
+               "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+               "copyright_link": "Et possimus quas consequatur qui optio. Maxime abo.",
+               "geotag": 0,
+               "branches": [16],
+               "tags": [],
+               "last_edit_date": 634912200,
+               "last_edit_time": 634912200,
+               "last_edit_video_by": "ultrices.a@nonjusto.ca",
+               "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+                },
+                  "12746" : {
+                    "id": 12745,
+                     "status": "active",
+               "views": 1885,
+               "author": "Prof. Ben Renner II",
+               "main_center": false,
+               "main_top": false,
+               "rubric_top": false,
+               "lightning": false,
+               "promo": false,
+               "embargo": 634912200,
+               "title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+               "seo_title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+               "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderRerum sed atque voluptate dolorem et velit.",
+               "text": "Repudiandae et amet numqus non.",
+               "story_id": 10,
+               "story_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+               "related_news": [5435,2345,3654,4674],
+               "related_video_articles": [3451,2435,3543,4654],
+               "related_articles": [2341,2432,3565,4768],
+               "related_galleries": [1775,6782,5763,4676],
+               "video_src": "http:\/\/path.com",
+               "remove_after_36": false,
+               "last_edit_by": "ultrices.a@nonjusto.ca",
+               "created_by": "millie.zieme@example.net",
+               "country_top": false,
+               "created": 634912200,
+               "updated": 634912200,
+               "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+               "img_title": "dolor",
+               "img_alt": "Error quod cum sunt rem. Nobis maioreem.",
+               "supertag": 16,
+               "copyright_origin": "Saepe aut qui eum beatae delectus. Aum sit magnam.",
+               "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+               "copyright_link": "Et possimus quas consequatur qui optio. Maxime abo.",
+               "geotag": 0,
+               "branches": [16],
+               "tags": [],
+               "last_edit_date": 634912200,
+               "last_edit_time": 634912200,
+               "last_edit_video_by": "ultrices.a@nonjusto.ca",
+               "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+                }
+                },
+                "meta": {
+                    "count": "3",
+                    "moreAhead": "false",
+                    "moreBehind": "false"
+                }
+            }
+
+### Создать статью [POST /article/add]
+
+Получает JSON, содержащий поля для модели.
+
++ Request (application/json)
+
+        {
+            "views": 0,
+            "author": "Prof. Ben Renner II",
+            "main_center": false,
+            "main_top": false,
+            "rubric_top": false,
+            "lightning": false,
+            "promo": false,
+            "embargo": 634912200,
+            "title": "Placeat dolorem dolor aut dolore et maxime natus. Qui quia consequatur voluptas amet tempore. Dolor harum dolores rerum eius quae illum et esse. Alias porro nemo quisquam blanditiis quo.",
+            "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderit cumque blanditiis iste eos occaecati. Aspernatur eius omnis velit tenetur repellat.\n\nDolore cum voluptas cum quidem. Nesciunt et voluptatibus tempore et. Reprehenderit est ratione sint rerum hic et est.\n\nFugiat molestias impedit occaecati est est asperiores ducimus. Similique fuga dolores culpa consectetur ut odio quisquam. Omnis animi quibusdam ea debitis quos iusto molestias vel.\n\nVelit omnis minus adipisci quis excepturi et. In et vel voluptatem velit. Exercitationem mollitia quo sed quibusdam ullam vel. Ea fugit maiores ab qui ab. Fuga magnam sit esse voluptas.\n\nPariatur a ea eum deserunt dicta eum. Sed eos molestiae quod saepe explicabo id natus. Saepe dolorum eligendi dolore asperiores enim sit perferendis.\n\nRerum sunt vitae qui accusamus labore nihil exercitationem. Autem autem eveniet suscipit in dolorem hic dolores. Velit sit voluptas praesentium aspernatur illum quae voluptas. Numquam nihil occaecati maiores quidem quibusdam consectetur sit.\n\nOmnis ut cumque consequatur itaque doloremque voluptatem dolores. Deserunt sint quia omnis minus. Non nisi enim pariatur dolor esse aut dignissimos. Quam facere eos cumque. Ipsa quo ullam et omnis illo suscipit.\n\nSed tempore et ut voluptatum voluptate odit. Quo dolorem quo nemo suscipit quis mollitia natus. Ut vero nihil animi sequi exercitationem. Et dolor eligendi omnis doloremque explicabo.\n\nQuia quod quidem soluta eligendi sed voluptatem quo. Doloremque iure quia laboriosam distinctio itaque sunt qui.\n\nCorporis sed quos rem accusantium quasi sed sit. Autem adipisci quod vel officiis quasi magni exercitationem. Rerum sed atque voluptate dolorem et velit.",
+            "text": "Repudiandae et amet numquam magni beatae. Perspiciatis totam voluptatem veritatis cupiditate dicta odio et. Enim eaque odio quisquam.\n\nOmnis a doloribus dolores delectus quis et voluptates asperiores. Assumenda voluptatem vitae earum et. In doloribus praesentium ut et ex maiores.\n\nFuga aut at sint qui expedita sapiente. Accusamus nam occaecati consequuntur eveniet exercitationem dolore.\n\nAut odio omnis debitis labore. Iure ut veniam reprehenderit et molestias nesciunt. Provident illum magnam nihil aut. Aperiam vel debitis nihil aliquam voluptas est.\n\nEt quaerat aut alias ut cumque ut est rem. Consectetur sunt ex non libero ex placeat. Commodi enim nam aliquid est cum voluptatem.\n\nPossimus possimus voluptatem cupiditate iusto ea expedita minima. Est facilis voluptas totam voluptatibus. Deserunt minus pariatur voluptate similique sunt.\n\nQuo sed nihil doloremque mollitia illo itaque cupiditate odio. Excepturi alias vitae qui recusandae repellat. Quae molestiae ut libero. Nostrum ipsam accusantium similique deleniti repellendus.\n\nIncidunt quae nesciunt hic voluptas et perspiciatis fuga. Sed vero fuga sit cumque neque quia ea. Itaque eum repellendus reprehenderit corrupti.\n\nEsse et excepturi et nisi totam. Odit voluptas ipsam rerum dolorem eum sit. Dolorem voluptate officia a ducimus optio tenetur. Accusamus qui explicabo non odit.\n\nEnim odio numquam eos quidem dolorum aut eius. Distinctio nisi ipsam perferendis rerum nam accusamus.\n\nQuis dolorum in placeat ratione iusto aut nesciunt cum. Commodi consequatur nam voluptas asperiores cupiditate aspernatur numquam. Voluptatem veritatis nemo quo voluptatem illo. Odio molestias eos ea odio velit aut.\n\nEa odit illo labore dignissimos rerum et quam. Autem qui fuga qui. Consequatur non velit rerum quaerat facilis ex et. Sed animi est qui ratione recusandae quo beatae.\n\nAsperiores consequuntur sed molestiae ut dolorum omnis dicta. Provident nihil et sapiente amet sit aut. Unde quod aut ducimus quo. Qui qui placeat nostrum consequatur eos nobis molestias. Quisquam soluta magni at quia recusandae ut aut.\n\nItaque aspernatur aut minima tenetur enim voluptatem repellat accusamus. Dignissimos at ut ipsam mollitia sunt.\n\nEligendi corrupti et repellat ducimus. Officia distinctio in atque est. A aliquid veniam et eveniet ut omnis at. Est nisi id incidunt minima nihil repellendus ut.\n\nRepellendus non ad dolor dicta. Nemo praesentium quia perferendis molestiae qui dolore. Ut reprehenderit et nihil eum aut. Consequatur magnam voluptatem sed nemo.\n\nFacilis consequatur et molestiae ut. Sit et tempora soluta sint ea ducimus mollitia. Repudiandae totam id sint deleniti sed. Et dicta molestiae velit officiis rerum repellat ullam sit.\n\nRem quae nostrum est velit esse aut. Magnam qui esse numquam id.\n\nVelit est nihil quisquam autem voluptatem non repudiandae sit. Dolor explicabo veniam in molestiae quia.\n\nIure nesciunt dolores numquam sint. Debitis officiis voluptatem laudantium adipisci et quia. Occaecati facere neque vel nihil atque architecto quidem.\n\nConsectetur ipsum culpa adipisci nemo qui qui. Blanditiis sequi sed enim quae. Repellat voluptatibus voluptatem tempore culpa neque. Blanditiis neque assumenda fugiat doloremque dignissimos in qui.\n\nEum ea voluptatibus sed ab. Fuga nesciunt asperiores reprehenderit. Culpa autem ea ut. Cumque consectetur quibusdam qui repellendus suscipit. Praesentium vel impedit earum.\n\nFacilis perspiciatis ducimus laborum error aspernatur est. Est voluptate aut molestiae sit. Sit ex qui eum voluptatem in porro. Quis et voluptate molestias exercitationem quod.\n\nSed aut et eum esse. Qui qui sapiente similique ullam omnis totam necessitatibus. In consectetur doloremque architecto repellendus. Qui laborum cum quis dolor sed consequuntur.\n\nDolorem provident veritatis maiores. Voluptate deleniti aut magnam dolor et ipsa ea. Voluptatibus accusantium explicabo quam inventore iste. Autem sunt saepe voluptatum est non.\n\nNisi et id expedita eos autem non tempora expedita. Velit iure debitis commodi eligendi ea tenetur. Eaque optio aut saepe temporibus sit eveniet qui ipsa. Doloremque molestias molestiae porro ea aliquid.\n\nQuam aut non id architecto. Consequatur sapiente vel rerum. Minus nihil vero illo sapiente quas.\n\nQuia sint repellendus culpa. In et nihil sint ipsam nostrum voluptas libero. Deleniti ipsa libero non et cumque molestiae quis.\n\nLibero et aspernatur magnam id autem similique quasi. Amet rerum veniam consequatur enim dolores. Voluptatem perspiciatis nihil et ut similique perspiciatis. Officia id et dignissimos itaque.\n\nSimilique assumenda laudantium aut consequatur aperiam magnam. Quia ut quasi quia unde minus voluptatibus adipisci. Quia cupiditate consequatur quo voluptatem libero officia. Aut rerum temporibus laudantium.\n\nEveniet ea voluptatem voluptatem iste soluta ea. Ratione quis sit eos odit repellendus dolores. Veniam ipsam eos qui ut. Ut ducimus a sapiente accusamus labore quia eum.\n\nMagnam blanditiis minus modi quis rem minima sed. Molestias sit et sint esse. Nobis enim laboriosam vel odio quas amet sequi. Exercitationem dolorum cumque odit ratione.\n\nCupiditate alias dolores aliquid velit possimus. Commodi ut quo sapiente et aliquid sint.\n\nDolorem praesentium consequatur ad voluptas et sint omnis. Error dolore eius non consequatur placeat. Quo laudantium libero et repudiandae.\n\nSit repudiandae vel velit et eos sit sit. At vel non aut itaque rerum atque. Voluptatum sit dolores omnis. Eaque et dignissimos sint nemo ex non nisi voluptas. Laudantium deleniti ullam ut saepe qui.\n\nRerum totam repellendus modi molestias accusamus atque. Rerum dignissimos vel at nihil. Modi dignissimos vel et quisquam.\n\nAlias natus quia itaque enim quo totam. Rerum totam possimus sapiente. Et molestiae sapiente accusantium quae a.\n\nConsectetur suscipit est et tempora. Similique in et quidem minima velit doloribus. Dicta perferendis minus id dolorem. Maiores repellendus omnis eos error sed asperiores sed esse.\n\nPerferendis excepturi quas aut ducimus harum aut similique. Autem reprehenderit id ex.\n\nVelit sed vel velit et impedit sint voluptas. Rerum quia numquam cum eos architecto et ex. Praesentium corrupti consequuntur fuga sapiente veritatis. Odit quisquam pariatur fugiat odit sint voluptatibus non.",
+            "topic_id": 10,
+            "topic_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+            "related_news": [5435,2345,3654,4674],
+            "related_video_articles": [3451,2435,3543,4654],
+            "related_articles": [2341,2432,3565,4768],
+            "related_galleries": [1775,6782,5763,4676],
+            "image_id": 1,
+            "video_src": "http:\/\/path.com",
+            "remove_after_36": false,
+            "last_edit_by": "ultrices.a@nonjusto.ca",
+            "created_by": "millie.zieme@example.net",
+            "country_top": false,
+            "created": null,
+            "updated": null,
+            "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+            "img_title": "dolor",
+            "img_alt": "Error quod cum sunt rem. Nobis maiores voluptatum neque. Aut corrupti rerum veniam fugiat sapiente.\nMinus voluptates enim voluptas. Soluta blanditiis omnis amet. Enim nobis suscipit nihil dolorem.",
+            "supertag": 16,
+            "copyright_origin": "Saepe aut qui eum beatae delectus. Aut reprehenderit nostrum mollitia et. Voluptates dignissimos aut dolor voluptatem sit magnam.",
+            "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+            "copyright_link": "Et possimus quas consequatur qui optio. Maxime architecto voluptate asperiores qui eos fugiat id. Officia dolorem necessitatibus cupiditate incidunt. Libero soluta ullam sed quos amet explicabo.",
+            "geotag": 0,
+            "branches": [16],
+            "tags": [],
+            "last_edit_date": 634912200,
+            "last_edit_time": 634912200,
+            "last_edit_video_by": "ultrices.a@nonjusto.ca",
+            "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+        }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /article/12
+
+    + Body
+
+            {
+                "id": 1,
+                "status": "active",
+                "views": 1885,
+                "author": "Prof. Ben Renner II",
+                "main_center": false,
+                "main_top": false,
+                "rubric_top": false,
+                "lightning": false,
+                "promo": false,
+                "embargo": 634912200,
+                "title": "Placeat dolorem dolor aut dolore et maxime natus. Qui quia consequatur voluptas amet tempore. Dolor harum dolores rerum eius quae illum et esse. Alias porro nemo quisquam blanditiis quo.",
+                "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderit cumque blanditiis iste eos occaecati. Aspernatur eius omnis velit tenetur repellat.\n\nDolore cum voluptas cum quidem. Nesciunt et voluptatibus tempore et. Reprehenderit est ratione sint rerum hic et est.\n\nFugiat molestias impedit occaecati est est asperiores ducimus. Similique fuga dolores culpa consectetur ut odio quisquam. Omnis animi quibusdam ea debitis quos iusto molestias vel.\n\nVelit omnis minus adipisci quis excepturi et. In et vel voluptatem velit. Exercitationem mollitia quo sed quibusdam ullam vel. Ea fugit maiores ab qui ab. Fuga magnam sit esse voluptas.\n\nPariatur a ea eum deserunt dicta eum. Sed eos molestiae quod saepe explicabo id natus. Saepe dolorum eligendi dolore asperiores enim sit perferendis.\n\nRerum sunt vitae qui accusamus labore nihil exercitationem. Autem autem eveniet suscipit in dolorem hic dolores. Velit sit voluptas praesentium aspernatur illum quae voluptas. Numquam nihil occaecati maiores quidem quibusdam consectetur sit.\n\nOmnis ut cumque consequatur itaque doloremque voluptatem dolores. Deserunt sint quia omnis minus. Non nisi enim pariatur dolor esse aut dignissimos. Quam facere eos cumque. Ipsa quo ullam et omnis illo suscipit.\n\nSed tempore et ut voluptatum voluptate odit. Quo dolorem quo nemo suscipit quis mollitia natus. Ut vero nihil animi sequi exercitationem. Et dolor eligendi omnis doloremque explicabo.\n\nQuia quod quidem soluta eligendi sed voluptatem quo. Doloremque iure quia laboriosam distinctio itaque sunt qui.\n\nCorporis sed quos rem accusantium quasi sed sit. Autem adipisci quod vel officiis quasi magni exercitationem. Rerum sed atque voluptate dolorem et velit.",
+                "text": "Repudiandae et amet numquam magni beatae. Perspiciatis totam voluptatem veritatis cupiditate dicta odio et. Enim eaque odio quisquam.\n\nOmnis a doloribus dolores delectus quis et voluptates asperiores. Assumenda voluptatem vitae earum et. In doloribus praesentium ut et ex maiores.\n\nFuga aut at sint qui expedita sapiente. Accusamus nam occaecati consequuntur eveniet exercitationem dolore.\n\nAut odio omnis debitis labore. Iure ut veniam reprehenderit et molestias nesciunt. Provident illum magnam nihil aut. Aperiam vel debitis nihil aliquam voluptas est.\n\nEt quaerat aut alias ut cumque ut est rem. Consectetur sunt ex non libero ex placeat. Commodi enim nam aliquid est cum voluptatem.\n\nPossimus possimus voluptatem cupiditate iusto ea expedita minima. Est facilis voluptas totam voluptatibus. Deserunt minus pariatur voluptate similique sunt.\n\nQuo sed nihil doloremque mollitia illo itaque cupiditate odio. Excepturi alias vitae qui recusandae repellat. Quae molestiae ut libero. Nostrum ipsam accusantium similique deleniti repellendus.\n\nIncidunt quae nesciunt hic voluptas et perspiciatis fuga. Sed vero fuga sit cumque neque quia ea. Itaque eum repellendus reprehenderit corrupti.\n\nEsse et excepturi et nisi totam. Odit voluptas ipsam rerum dolorem eum sit. Dolorem voluptate officia a ducimus optio tenetur. Accusamus qui explicabo non odit.\n\nEnim odio numquam eos quidem dolorum aut eius. Distinctio nisi ipsam perferendis rerum nam accusamus.\n\nQuis dolorum in placeat ratione iusto aut nesciunt cum. Commodi consequatur nam voluptas asperiores cupiditate aspernatur numquam. Voluptatem veritatis nemo quo voluptatem illo. Odio molestias eos ea odio velit aut.\n\nEa odit illo labore dignissimos rerum et quam. Autem qui fuga qui. Consequatur non velit rerum quaerat facilis ex et. Sed animi est qui ratione recusandae quo beatae.\n\nAsperiores consequuntur sed molestiae ut dolorum omnis dicta. Provident nihil et sapiente amet sit aut. Unde quod aut ducimus quo. Qui qui placeat nostrum consequatur eos nobis molestias. Quisquam soluta magni at quia recusandae ut aut.\n\nItaque aspernatur aut minima tenetur enim voluptatem repellat accusamus. Dignissimos at ut ipsam mollitia sunt.\n\nEligendi corrupti et repellat ducimus. Officia distinctio in atque est. A aliquid veniam et eveniet ut omnis at. Est nisi id incidunt minima nihil repellendus ut.\n\nRepellendus non ad dolor dicta. Nemo praesentium quia perferendis molestiae qui dolore. Ut reprehenderit et nihil eum aut. Consequatur magnam voluptatem sed nemo.\n\nFacilis consequatur et molestiae ut. Sit et tempora soluta sint ea ducimus mollitia. Repudiandae totam id sint deleniti sed. Et dicta molestiae velit officiis rerum repellat ullam sit.\n\nRem quae nostrum est velit esse aut. Magnam qui esse numquam id.\n\nVelit est nihil quisquam autem voluptatem non repudiandae sit. Dolor explicabo veniam in molestiae quia.\n\nIure nesciunt dolores numquam sint. Debitis officiis voluptatem laudantium adipisci et quia. Occaecati facere neque vel nihil atque architecto quidem.\n\nConsectetur ipsum culpa adipisci nemo qui qui. Blanditiis sequi sed enim quae. Repellat voluptatibus voluptatem tempore culpa neque. Blanditiis neque assumenda fugiat doloremque dignissimos in qui.\n\nEum ea voluptatibus sed ab. Fuga nesciunt asperiores reprehenderit. Culpa autem ea ut. Cumque consectetur quibusdam qui repellendus suscipit. Praesentium vel impedit earum.\n\nFacilis perspiciatis ducimus laborum error aspernatur est. Est voluptate aut molestiae sit. Sit ex qui eum voluptatem in porro. Quis et voluptate molestias exercitationem quod.\n\nSed aut et eum esse. Qui qui sapiente similique ullam omnis totam necessitatibus. In consectetur doloremque architecto repellendus. Qui laborum cum quis dolor sed consequuntur.\n\nDolorem provident veritatis maiores. Voluptate deleniti aut magnam dolor et ipsa ea. Voluptatibus accusantium explicabo quam inventore iste. Autem sunt saepe voluptatum est non.\n\nNisi et id expedita eos autem non tempora expedita. Velit iure debitis commodi eligendi ea tenetur. Eaque optio aut saepe temporibus sit eveniet qui ipsa. Doloremque molestias molestiae porro ea aliquid.\n\nQuam aut non id architecto. Consequatur sapiente vel rerum. Minus nihil vero illo sapiente quas.\n\nQuia sint repellendus culpa. In et nihil sint ipsam nostrum voluptas libero. Deleniti ipsa libero non et cumque molestiae quis.\n\nLibero et aspernatur magnam id autem similique quasi. Amet rerum veniam consequatur enim dolores. Voluptatem perspiciatis nihil et ut similique perspiciatis. Officia id et dignissimos itaque.\n\nSimilique assumenda laudantium aut consequatur aperiam magnam. Quia ut quasi quia unde minus voluptatibus adipisci. Quia cupiditate consequatur quo voluptatem libero officia. Aut rerum temporibus laudantium.\n\nEveniet ea voluptatem voluptatem iste soluta ea. Ratione quis sit eos odit repellendus dolores. Veniam ipsam eos qui ut. Ut ducimus a sapiente accusamus labore quia eum.\n\nMagnam blanditiis minus modi quis rem minima sed. Molestias sit et sint esse. Nobis enim laboriosam vel odio quas amet sequi. Exercitationem dolorum cumque odit ratione.\n\nCupiditate alias dolores aliquid velit possimus. Commodi ut quo sapiente et aliquid sint.\n\nDolorem praesentium consequatur ad voluptas et sint omnis. Error dolore eius non consequatur placeat. Quo laudantium libero et repudiandae.\n\nSit repudiandae vel velit et eos sit sit. At vel non aut itaque rerum atque. Voluptatum sit dolores omnis. Eaque et dignissimos sint nemo ex non nisi voluptas. Laudantium deleniti ullam ut saepe qui.\n\nRerum totam repellendus modi molestias accusamus atque. Rerum dignissimos vel at nihil. Modi dignissimos vel et quisquam.\n\nAlias natus quia itaque enim quo totam. Rerum totam possimus sapiente. Et molestiae sapiente accusantium quae a.\n\nConsectetur suscipit est et tempora. Similique in et quidem minima velit doloribus. Dicta perferendis minus id dolorem. Maiores repellendus omnis eos error sed asperiores sed esse.\n\nPerferendis excepturi quas aut ducimus harum aut similique. Autem reprehenderit id ex.\n\nVelit sed vel velit et impedit sint voluptas. Rerum quia numquam cum eos architecto et ex. Praesentium corrupti consequuntur fuga sapiente veritatis. Odit quisquam pariatur fugiat odit sint voluptatibus non.",
+                "topic_id": 10,
+                "topic_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+                "related_news": [5435,2345,3654,4674],
+                "related_video_articles": [3451,2435,3543,4654],
+                "related_articles": [2341,2432,3565,4768],
+                "related_galleries": [1775,6782,5763,4676],
+                "image_id": 1,
+                "video_src": "http:\/\/path.com",
+                "remove_after_36": false,
+                "last_edit_by": "ultrices.a@nonjusto.ca",
+                "created_by": "millie.zieme@example.net",
+                "country_top": false,
+                "created": 634912200,
+                "updated": 634912200,
+                "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+                "img_title": "dolor",
+                "img_alt": "Error quod cum sunt rem. Nobis maiores voluptatum neque. Aut corrupti rerum veniam fugiat sapiente.\nMinus voluptates enim voluptas. Soluta blanditiis omnis amet. Enim nobis suscipit nihil dolorem.",
+                "supertag": 16,
+                "copyright_origin": "Saepe aut qui eum beatae delectus. Aut reprehenderit nostrum mollitia et. Voluptates dignissimos aut dolor voluptatem sit magnam.",
+                "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+                "copyright_link": "Et possimus quas consequatur qui optio. Maxime architecto voluptate asperiores qui eos fugiat id. Officia dolorem necessitatibus cupiditate incidunt. Libero soluta ullam sed quos amet explicabo.",
+                "geotag": 0,
+                "branches": [16],
+                "tags": [],
+                "last_edit_date": 634912200,
+                "last_edit_time": 634912200,
+                "last_edit_video_by": "ultrices.a@nonjusto.ca",
+                "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+            }
+
+### Изменить статью [PUT /article/update]
+
+Получает JSON, содержащий поля для модели.
+
++ Request (application/json)
+
+        {
+            "id": 1,
+                "status": "active",
+                "views": 1885,
+                "author": "Prof. Ben Renner II",
+                "main_center": false,
+                "main_top": false,
+                "rubric_top": false,
+                "lightning": false,
+                "promo": false,
+                "embargo": 634912200,
+                "title": "Placeat dolorem dolor aut dolore et maxime natus. Qui quia consequatur voluptas amet tempore. Dolor harum dolores rerum eius quae illum et esse. Alias porro nemo quisquam blanditiis quo.",
+                "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderit cumque blanditiis iste eos occaecati. Aspernatur eius omnis velit tenetur repellat.\n\nDolore cum voluptas cum quidem. Nesciunt et voluptatibus tempore et. Reprehenderit est ratione sint rerum hic et est.\n\nFugiat molestias impedit occaecati est est asperiores ducimus. Similique fuga dolores culpa consectetur ut odio quisquam. Omnis animi quibusdam ea debitis quos iusto molestias vel.\n\nVelit omnis minus adipisci quis excepturi et. In et vel voluptatem velit. Exercitationem mollitia quo sed quibusdam ullam vel. Ea fugit maiores ab qui ab. Fuga magnam sit esse voluptas.\n\nPariatur a ea eum deserunt dicta eum. Sed eos molestiae quod saepe explicabo id natus. Saepe dolorum eligendi dolore asperiores enim sit perferendis.\n\nRerum sunt vitae qui accusamus labore nihil exercitationem. Autem autem eveniet suscipit in dolorem hic dolores. Velit sit voluptas praesentium aspernatur illum quae voluptas. Numquam nihil occaecati maiores quidem quibusdam consectetur sit.\n\nOmnis ut cumque consequatur itaque doloremque voluptatem dolores. Deserunt sint quia omnis minus. Non nisi enim pariatur dolor esse aut dignissimos. Quam facere eos cumque. Ipsa quo ullam et omnis illo suscipit.\n\nSed tempore et ut voluptatum voluptate odit. Quo dolorem quo nemo suscipit quis mollitia natus. Ut vero nihil animi sequi exercitationem. Et dolor eligendi omnis doloremque explicabo.\n\nQuia quod quidem soluta eligendi sed voluptatem quo. Doloremque iure quia laboriosam distinctio itaque sunt qui.\n\nCorporis sed quos rem accusantium quasi sed sit. Autem adipisci quod vel officiis quasi magni exercitationem. Rerum sed atque voluptate dolorem et velit.",
+                "text": "Repudiandae et amet numquam magni beatae. Perspiciatis totam voluptatem veritatis cupiditate dicta odio et. Enim eaque odio quisquam.\n\nOmnis a doloribus dolores delectus quis et voluptates asperiores. Assumenda voluptatem vitae earum et. In doloribus praesentium ut et ex maiores.\n\nFuga aut at sint qui expedita sapiente. Accusamus nam occaecati consequuntur eveniet exercitationem dolore.\n\nAut odio omnis debitis labore. Iure ut veniam reprehenderit et molestias nesciunt. Provident illum magnam nihil aut. Aperiam vel debitis nihil aliquam voluptas est.\n\nEt quaerat aut alias ut cumque ut est rem. Consectetur sunt ex non libero ex placeat. Commodi enim nam aliquid est cum voluptatem.\n\nPossimus possimus voluptatem cupiditate iusto ea expedita minima. Est facilis voluptas totam voluptatibus. Deserunt minus pariatur voluptate similique sunt.\n\nQuo sed nihil doloremque mollitia illo itaque cupiditate odio. Excepturi alias vitae qui recusandae repellat. Quae molestiae ut libero. Nostrum ipsam accusantium similique deleniti repellendus.\n\nIncidunt quae nesciunt hic voluptas et perspiciatis fuga. Sed vero fuga sit cumque neque quia ea. Itaque eum repellendus reprehenderit corrupti.\n\nEsse et excepturi et nisi totam. Odit voluptas ipsam rerum dolorem eum sit. Dolorem voluptate officia a ducimus optio tenetur. Accusamus qui explicabo non odit.\n\nEnim odio numquam eos quidem dolorum aut eius. Distinctio nisi ipsam perferendis rerum nam accusamus.\n\nQuis dolorum in placeat ratione iusto aut nesciunt cum. Commodi consequatur nam voluptas asperiores cupiditate aspernatur numquam. Voluptatem veritatis nemo quo voluptatem illo. Odio molestias eos ea odio velit aut.\n\nEa odit illo labore dignissimos rerum et quam. Autem qui fuga qui. Consequatur non velit rerum quaerat facilis ex et. Sed animi est qui ratione recusandae quo beatae.\n\nAsperiores consequuntur sed molestiae ut dolorum omnis dicta. Provident nihil et sapiente amet sit aut. Unde quod aut ducimus quo. Qui qui placeat nostrum consequatur eos nobis molestias. Quisquam soluta magni at quia recusandae ut aut.\n\nItaque aspernatur aut minima tenetur enim voluptatem repellat accusamus. Dignissimos at ut ipsam mollitia sunt.\n\nEligendi corrupti et repellat ducimus. Officia distinctio in atque est. A aliquid veniam et eveniet ut omnis at. Est nisi id incidunt minima nihil repellendus ut.\n\nRepellendus non ad dolor dicta. Nemo praesentium quia perferendis molestiae qui dolore. Ut reprehenderit et nihil eum aut. Consequatur magnam voluptatem sed nemo.\n\nFacilis consequatur et molestiae ut. Sit et tempora soluta sint ea ducimus mollitia. Repudiandae totam id sint deleniti sed. Et dicta molestiae velit officiis rerum repellat ullam sit.\n\nRem quae nostrum est velit esse aut. Magnam qui esse numquam id.\n\nVelit est nihil quisquam autem voluptatem non repudiandae sit. Dolor explicabo veniam in molestiae quia.\n\nIure nesciunt dolores numquam sint. Debitis officiis voluptatem laudantium adipisci et quia. Occaecati facere neque vel nihil atque architecto quidem.\n\nConsectetur ipsum culpa adipisci nemo qui qui. Blanditiis sequi sed enim quae. Repellat voluptatibus voluptatem tempore culpa neque. Blanditiis neque assumenda fugiat doloremque dignissimos in qui.\n\nEum ea voluptatibus sed ab. Fuga nesciunt asperiores reprehenderit. Culpa autem ea ut. Cumque consectetur quibusdam qui repellendus suscipit. Praesentium vel impedit earum.\n\nFacilis perspiciatis ducimus laborum error aspernatur est. Est voluptate aut molestiae sit. Sit ex qui eum voluptatem in porro. Quis et voluptate molestias exercitationem quod.\n\nSed aut et eum esse. Qui qui sapiente similique ullam omnis totam necessitatibus. In consectetur doloremque architecto repellendus. Qui laborum cum quis dolor sed consequuntur.\n\nDolorem provident veritatis maiores. Voluptate deleniti aut magnam dolor et ipsa ea. Voluptatibus accusantium explicabo quam inventore iste. Autem sunt saepe voluptatum est non.\n\nNisi et id expedita eos autem non tempora expedita. Velit iure debitis commodi eligendi ea tenetur. Eaque optio aut saepe temporibus sit eveniet qui ipsa. Doloremque molestias molestiae porro ea aliquid.\n\nQuam aut non id architecto. Consequatur sapiente vel rerum. Minus nihil vero illo sapiente quas.\n\nQuia sint repellendus culpa. In et nihil sint ipsam nostrum voluptas libero. Deleniti ipsa libero non et cumque molestiae quis.\n\nLibero et aspernatur magnam id autem similique quasi. Amet rerum veniam consequatur enim dolores. Voluptatem perspiciatis nihil et ut similique perspiciatis. Officia id et dignissimos itaque.\n\nSimilique assumenda laudantium aut consequatur aperiam magnam. Quia ut quasi quia unde minus voluptatibus adipisci. Quia cupiditate consequatur quo voluptatem libero officia. Aut rerum temporibus laudantium.\n\nEveniet ea voluptatem voluptatem iste soluta ea. Ratione quis sit eos odit repellendus dolores. Veniam ipsam eos qui ut. Ut ducimus a sapiente accusamus labore quia eum.\n\nMagnam blanditiis minus modi quis rem minima sed. Molestias sit et sint esse. Nobis enim laboriosam vel odio quas amet sequi. Exercitationem dolorum cumque odit ratione.\n\nCupiditate alias dolores aliquid velit possimus. Commodi ut quo sapiente et aliquid sint.\n\nDolorem praesentium consequatur ad voluptas et sint omnis. Error dolore eius non consequatur placeat. Quo laudantium libero et repudiandae.\n\nSit repudiandae vel velit et eos sit sit. At vel non aut itaque rerum atque. Voluptatum sit dolores omnis. Eaque et dignissimos sint nemo ex non nisi voluptas. Laudantium deleniti ullam ut saepe qui.\n\nRerum totam repellendus modi molestias accusamus atque. Rerum dignissimos vel at nihil. Modi dignissimos vel et quisquam.\n\nAlias natus quia itaque enim quo totam. Rerum totam possimus sapiente. Et molestiae sapiente accusantium quae a.\n\nConsectetur suscipit est et tempora. Similique in et quidem minima velit doloribus. Dicta perferendis minus id dolorem. Maiores repellendus omnis eos error sed asperiores sed esse.\n\nPerferendis excepturi quas aut ducimus harum aut similique. Autem reprehenderit id ex.\n\nVelit sed vel velit et impedit sint voluptas. Rerum quia numquam cum eos architecto et ex. Praesentium corrupti consequuntur fuga sapiente veritatis. Odit quisquam pariatur fugiat odit sint voluptatibus non.",
+                "topic_id": 10,
+                "topic_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+                "related_news": [5435,2345,3654,4674],
+                "related_video_articles": [3451,2435,3543,4654],
+                "related_articles": [2341,2432,3565,4768],
+                "related_galleries": [1775,6782,5763,4676],
+                "image_id": 1,
+                "video_src": "http:\/\/path.com",
+                "remove_after_36": false,
+                "last_edit_by": "ultrices.a@nonjusto.ca",
+                "created_by": "millie.zieme@example.net",
+                "country_top": false,
+                "created": 634912200,
+                "updated": 634912200,
+                "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+                "img_title": "dolor",
+                "img_alt": "Error quod cum sunt rem. Nobis maiores voluptatum neque. Aut corrupti rerum veniam fugiat sapiente.\nMinus voluptates enim voluptas. Soluta blanditiis omnis amet. Enim nobis suscipit nihil dolorem.",
+                "supertag": 16,
+                "copyright_origin": "Saepe aut qui eum beatae delectus. Aut reprehenderit nostrum mollitia et. Voluptates dignissimos aut dolor voluptatem sit magnam.",
+                "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+                "copyright_link": "Et possimus quas consequatur qui optio. Maxime architecto voluptate asperiores qui eos fugiat id. Officia dolorem necessitatibus cupiditate incidunt. Libero soluta ullam sed quos amet explicabo.",
+                "geotag": 0,
+                "branches": [16],
+                "tags": [],
+                "last_edit_date": 634912200,
+                "last_edit_time": 634912200,
+                "last_edit_video_by": "ultrices.a@nonjusto.ca",
+                "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+        }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /article/12
+
+    + Body
+
+            {
+                "id": 1,
+                "status": "active",
+                "views": 1885,
+                "author": "Prof. Ben Renner II",
+                "main_center": false,
+                "main_top": false,
+                "rubric_top": false,
+                "lightning": false,
+                "promo": false,
+                "embargo": 634912200,
+                "title": "Placeat dolorem dolor aut dolore et maxime natus. Qui quia consequatur voluptas amet tempore. Dolor harum dolores rerum eius quae illum et esse. Alias porro nemo quisquam blanditiis quo.",
+                "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderit cumque blanditiis iste eos occaecati. Aspernatur eius omnis velit tenetur repellat.\n\nDolore cum voluptas cum quidem. Nesciunt et voluptatibus tempore et. Reprehenderit est ratione sint rerum hic et est.\n\nFugiat molestias impedit occaecati est est asperiores ducimus. Similique fuga dolores culpa consectetur ut odio quisquam. Omnis animi quibusdam ea debitis quos iusto molestias vel.\n\nVelit omnis minus adipisci quis excepturi et. In et vel voluptatem velit. Exercitationem mollitia quo sed quibusdam ullam vel. Ea fugit maiores ab qui ab. Fuga magnam sit esse voluptas.\n\nPariatur a ea eum deserunt dicta eum. Sed eos molestiae quod saepe explicabo id natus. Saepe dolorum eligendi dolore asperiores enim sit perferendis.\n\nRerum sunt vitae qui accusamus labore nihil exercitationem. Autem autem eveniet suscipit in dolorem hic dolores. Velit sit voluptas praesentium aspernatur illum quae voluptas. Numquam nihil occaecati maiores quidem quibusdam consectetur sit.\n\nOmnis ut cumque consequatur itaque doloremque voluptatem dolores. Deserunt sint quia omnis minus. Non nisi enim pariatur dolor esse aut dignissimos. Quam facere eos cumque. Ipsa quo ullam et omnis illo suscipit.\n\nSed tempore et ut voluptatum voluptate odit. Quo dolorem quo nemo suscipit quis mollitia natus. Ut vero nihil animi sequi exercitationem. Et dolor eligendi omnis doloremque explicabo.\n\nQuia quod quidem soluta eligendi sed voluptatem quo. Doloremque iure quia laboriosam distinctio itaque sunt qui.\n\nCorporis sed quos rem accusantium quasi sed sit. Autem adipisci quod vel officiis quasi magni exercitationem. Rerum sed atque voluptate dolorem et velit.",
+                "text": "Repudiandae et amet numquam magni beatae. Perspiciatis totam voluptatem veritatis cupiditate dicta odio et. Enim eaque odio quisquam.\n\nOmnis a doloribus dolores delectus quis et voluptates asperiores. Assumenda voluptatem vitae earum et. In doloribus praesentium ut et ex maiores.\n\nFuga aut at sint qui expedita sapiente. Accusamus nam occaecati consequuntur eveniet exercitationem dolore.\n\nAut odio omnis debitis labore. Iure ut veniam reprehenderit et molestias nesciunt. Provident illum magnam nihil aut. Aperiam vel debitis nihil aliquam voluptas est.\n\nEt quaerat aut alias ut cumque ut est rem. Consectetur sunt ex non libero ex placeat. Commodi enim nam aliquid est cum voluptatem.\n\nPossimus possimus voluptatem cupiditate iusto ea expedita minima. Est facilis voluptas totam voluptatibus. Deserunt minus pariatur voluptate similique sunt.\n\nQuo sed nihil doloremque mollitia illo itaque cupiditate odio. Excepturi alias vitae qui recusandae repellat. Quae molestiae ut libero. Nostrum ipsam accusantium similique deleniti repellendus.\n\nIncidunt quae nesciunt hic voluptas et perspiciatis fuga. Sed vero fuga sit cumque neque quia ea. Itaque eum repellendus reprehenderit corrupti.\n\nEsse et excepturi et nisi totam. Odit voluptas ipsam rerum dolorem eum sit. Dolorem voluptate officia a ducimus optio tenetur. Accusamus qui explicabo non odit.\n\nEnim odio numquam eos quidem dolorum aut eius. Distinctio nisi ipsam perferendis rerum nam accusamus.\n\nQuis dolorum in placeat ratione iusto aut nesciunt cum. Commodi consequatur nam voluptas asperiores cupiditate aspernatur numquam. Voluptatem veritatis nemo quo voluptatem illo. Odio molestias eos ea odio velit aut.\n\nEa odit illo labore dignissimos rerum et quam. Autem qui fuga qui. Consequatur non velit rerum quaerat facilis ex et. Sed animi est qui ratione recusandae quo beatae.\n\nAsperiores consequuntur sed molestiae ut dolorum omnis dicta. Provident nihil et sapiente amet sit aut. Unde quod aut ducimus quo. Qui qui placeat nostrum consequatur eos nobis molestias. Quisquam soluta magni at quia recusandae ut aut.\n\nItaque aspernatur aut minima tenetur enim voluptatem repellat accusamus. Dignissimos at ut ipsam mollitia sunt.\n\nEligendi corrupti et repellat ducimus. Officia distinctio in atque est. A aliquid veniam et eveniet ut omnis at. Est nisi id incidunt minima nihil repellendus ut.\n\nRepellendus non ad dolor dicta. Nemo praesentium quia perferendis molestiae qui dolore. Ut reprehenderit et nihil eum aut. Consequatur magnam voluptatem sed nemo.\n\nFacilis consequatur et molestiae ut. Sit et tempora soluta sint ea ducimus mollitia. Repudiandae totam id sint deleniti sed. Et dicta molestiae velit officiis rerum repellat ullam sit.\n\nRem quae nostrum est velit esse aut. Magnam qui esse numquam id.\n\nVelit est nihil quisquam autem voluptatem non repudiandae sit. Dolor explicabo veniam in molestiae quia.\n\nIure nesciunt dolores numquam sint. Debitis officiis voluptatem laudantium adipisci et quia. Occaecati facere neque vel nihil atque architecto quidem.\n\nConsectetur ipsum culpa adipisci nemo qui qui. Blanditiis sequi sed enim quae. Repellat voluptatibus voluptatem tempore culpa neque. Blanditiis neque assumenda fugiat doloremque dignissimos in qui.\n\nEum ea voluptatibus sed ab. Fuga nesciunt asperiores reprehenderit. Culpa autem ea ut. Cumque consectetur quibusdam qui repellendus suscipit. Praesentium vel impedit earum.\n\nFacilis perspiciatis ducimus laborum error aspernatur est. Est voluptate aut molestiae sit. Sit ex qui eum voluptatem in porro. Quis et voluptate molestias exercitationem quod.\n\nSed aut et eum esse. Qui qui sapiente similique ullam omnis totam necessitatibus. In consectetur doloremque architecto repellendus. Qui laborum cum quis dolor sed consequuntur.\n\nDolorem provident veritatis maiores. Voluptate deleniti aut magnam dolor et ipsa ea. Voluptatibus accusantium explicabo quam inventore iste. Autem sunt saepe voluptatum est non.\n\nNisi et id expedita eos autem non tempora expedita. Velit iure debitis commodi eligendi ea tenetur. Eaque optio aut saepe temporibus sit eveniet qui ipsa. Doloremque molestias molestiae porro ea aliquid.\n\nQuam aut non id architecto. Consequatur sapiente vel rerum. Minus nihil vero illo sapiente quas.\n\nQuia sint repellendus culpa. In et nihil sint ipsam nostrum voluptas libero. Deleniti ipsa libero non et cumque molestiae quis.\n\nLibero et aspernatur magnam id autem similique quasi. Amet rerum veniam consequatur enim dolores. Voluptatem perspiciatis nihil et ut similique perspiciatis. Officia id et dignissimos itaque.\n\nSimilique assumenda laudantium aut consequatur aperiam magnam. Quia ut quasi quia unde minus voluptatibus adipisci. Quia cupiditate consequatur quo voluptatem libero officia. Aut rerum temporibus laudantium.\n\nEveniet ea voluptatem voluptatem iste soluta ea. Ratione quis sit eos odit repellendus dolores. Veniam ipsam eos qui ut. Ut ducimus a sapiente accusamus labore quia eum.\n\nMagnam blanditiis minus modi quis rem minima sed. Molestias sit et sint esse. Nobis enim laboriosam vel odio quas amet sequi. Exercitationem dolorum cumque odit ratione.\n\nCupiditate alias dolores aliquid velit possimus. Commodi ut quo sapiente et aliquid sint.\n\nDolorem praesentium consequatur ad voluptas et sint omnis. Error dolore eius non consequatur placeat. Quo laudantium libero et repudiandae.\n\nSit repudiandae vel velit et eos sit sit. At vel non aut itaque rerum atque. Voluptatum sit dolores omnis. Eaque et dignissimos sint nemo ex non nisi voluptas. Laudantium deleniti ullam ut saepe qui.\n\nRerum totam repellendus modi molestias accusamus atque. Rerum dignissimos vel at nihil. Modi dignissimos vel et quisquam.\n\nAlias natus quia itaque enim quo totam. Rerum totam possimus sapiente. Et molestiae sapiente accusantium quae a.\n\nConsectetur suscipit est et tempora. Similique in et quidem minima velit doloribus. Dicta perferendis minus id dolorem. Maiores repellendus omnis eos error sed asperiores sed esse.\n\nPerferendis excepturi quas aut ducimus harum aut similique. Autem reprehenderit id ex.\n\nVelit sed vel velit et impedit sint voluptas. Rerum quia numquam cum eos architecto et ex. Praesentium corrupti consequuntur fuga sapiente veritatis. Odit quisquam pariatur fugiat odit sint voluptatibus non.",
+                "topic_id": 10,
+                "topic_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+                "related_news": [5435,2345,3654,4674],
+                "related_video_articles": [3451,2435,3543,4654],
+                "related_articles": [2341,2432,3565,4768],
+                "related_galleries": [1775,6782,5763,4676],
+                "image_id": 1,
+                "video_src": "http:\/\/path.com",
+                "remove_after_36": false,
+                "last_edit_by": "ultrices.a@nonjusto.ca",
+                "created_by": "millie.zieme@example.net",
+                "country_top": false,
+                "created": 634912200,
+                "updated": 634912200,
+                "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+                "img_title": "dolor",
+                "img_alt": "Error quod cum sunt rem. Nobis maiores voluptatum neque. Aut corrupti rerum veniam fugiat sapiente.\nMinus voluptates enim voluptas. Soluta blanditiis omnis amet. Enim nobis suscipit nihil dolorem.",
+                "supertag": 16,
+                "copyright_origin": "Saepe aut qui eum beatae delectus. Aut reprehenderit nostrum mollitia et. Voluptates dignissimos aut dolor voluptatem sit magnam.",
+                "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+                "copyright_link": "Et possimus quas consequatur qui optio. Maxime architecto voluptate asperiores qui eos fugiat id. Officia dolorem necessitatibus cupiditate incidunt. Libero soluta ullam sed quos amet explicabo.",
+                "geotag": 0,
+                "branches": [16],
+                "tags": [],
+                "last_edit_date": 634912200,
+                "last_edit_time": 634912200,
+                "last_edit_video_by": "ultrices.a@nonjusto.ca",
+                "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+            }
+
+## Новости News [/news]
+
+### ✔ Получить новость по id [GET /news/{id}]
+
++ Parameters
+
+    + id: 3 (number) - id требуемой  статьи
+
++ Response 200 (application/json)
+
+        {
+               "id": "12",
+                "status": "active",
+               "views": 1885,
+               "author": "Prof. Ben Renner II",
+               "main_center": false,
+               "main_top": false,
+               "rubric_top": false,
+               "lightning": false,
+               "promo": false,
+               "embargo": 634912200,
+               "title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+               "seo_title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+               "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderRerum sed atque voluptate dolorem et velit.",
+               "text": "Repudiandae et amet numqus non.",
+               "story_id": 10,
+               "story_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+               "related_news": [5435,2345,3654,4674],
+               "related_video_articles": [3451,2435,3543,4654],
+               "related_articles": [2341,2432,3565,4768],
+               "related_galleries": [1775,6782,5763,4676],
+               "video_src": "http:\/\/path.com",
+               "remove_after_36": false,
+               "last_edit_by": "ultrices.a@nonjusto.ca",
+               "created_by": "millie.zieme@example.net",
+               "country_top": false,
+               "created": 634912200,
+               "updated": 634912200,
+               "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+               "img_title": "dolor",
+               "img_alt": "Error quod cum sunt rem. Nobis maioreem.",
+               "supertag": 16,
+               "copyright_origin": "Saepe aut qui eum beatae delectus. Aum sit magnam.",
+               "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+               "copyright_link": "Et possimus quas consequatur qui optio. Maxime abo.",
+               "geotag": 0,
+               "branches": [16],
+               "tags": [],
+               "last_edit_date": 634912200,
+               "last_edit_time": 634912200,
+               "last_edit_video_by": "ultrices.a@nonjusto.ca",
+               "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+            }
+
+### ✔ Получить новости по массиву id [POST /news/mass]
+
+Принимает массив id новостей возвращает ассоциативный массив новостей с соответствующими id
+
++ Request (application/json)
+
+        {
+            "id":  [
+                "4189",
+                "5436", 
+                "5646"
+            ]
+        }
+
++ Response 200 (application/json)
+
+           {
+               "12744": {
+                "id": 12744,
+                 "status": "active",
+               "views": 1885,
+               "author": "Prof. Ben Renner II",
+               "main_center": false,
+               "main_top": false,
+               "rubric_top": false,
+               "lightning": false,
+               "promo": false,
+               "embargo": 634912200,
+               "title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+               "seo_title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+               "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderRerum sed atque voluptate dolorem et velit.",
+               "text": "Repudiandae et amet numqus non.",
+               "story_id": 10,
+               "story_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+               "related_news": [5435,2345,3654,4674],
+               "related_video_articles": [3451,2435,3543,4654],
+               "related_articles": [2341,2432,3565,4768],
+               "related_galleries": [1775,6782,5763,4676],
+               "video_src": "http:\/\/path.com",
+               "remove_after_36": false,
+               "last_edit_by": "ultrices.a@nonjusto.ca",
+               "created_by": "millie.zieme@example.net",
+               "country_top": false,
+               "created": 634912200,
+               "updated": 634912200,
+               "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+               "img_title": "dolor",
+               "img_alt": "Error quod cum sunt rem. Nobis maioreem.",
+               "supertag": 16,
+               "copyright_origin": "Saepe aut qui eum beatae delectus. Aum sit magnam.",
+               "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+               "copyright_link": "Et possimus quas consequatur qui optio. Maxime abo.",
+               "geotag": 0,
+               "branches": [16],
+               "tags": [],
+               "last_edit_date": 634912200,
+               "last_edit_time": 634912200,
+               "last_edit_video_by": "ultrices.a@nonjusto.ca",
+               "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+            },
+              "12745": {
+                "id": 12745,
+                 "status": "active",
+               "views": 1885,
+               "author": "Prof. Ben Renner II",
+               "main_center": false,
+               "main_top": false,
+               "rubric_top": false,
+               "lightning": false,
+               "promo": false,
+               "embargo": 634912200,
+               "title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+               "seo_title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+               "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderRerum sed atque voluptate dolorem et velit.",
+               "text": "Repudiandae et amet numqus non.",
+               "story_id": 10,
+               "story_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+               "related_news": [5435,2345,3654,4674],
+               "related_video_articles": [3451,2435,3543,4654],
+               "related_articles": [2341,2432,3565,4768],
+               "related_galleries": [1775,6782,5763,4676],
+               "video_src": "http:\/\/path.com",
+               "remove_after_36": false,
+               "last_edit_by": "ultrices.a@nonjusto.ca",
+               "created_by": "millie.zieme@example.net",
+               "country_top": false,
+               "created": 634912200,
+               "updated": 634912200,
+               "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+               "img_title": "dolor",
+               "img_alt": "Error quod cum sunt rem. Nobis maioreem.",
+               "supertag": 16,
+               "copyright_origin": "Saepe aut qui eum beatae delectus. Aum sit magnam.",
+               "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+               "copyright_link": "Et possimus quas consequatur qui optio. Maxime abo.",
+               "geotag": 0,
+               "branches": [16],
+               "tags": [],
+               "last_edit_date": 634912200,
+               "last_edit_time": 634912200,
+               "last_edit_video_by": "ultrices.a@nonjusto.ca",
+               "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+            }
+          }
+
+### ✔ Получить ассоциативный массив новостей [GET /news/{limit}/{offset}]
+
++ Parameters
+
+    + limit: 10 (number) - Лимит новостей
+    + offset: 0 (number) - Смещение новостей
+
++ Response 200 (application/json)
+
+            {
+                "data": {
+                    "12744" : {
+                    "id": 12744,
+                     "status": "active",
+               "views": 1885,
+               "author": "Prof. Ben Renner II",
+               "main_center": false,
+               "main_top": false,
+               "rubric_top": false,
+               "lightning": false,
+               "promo": false,
+               "embargo": 634912200,
+               "title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+               "seo_title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+               "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderRerum sed atque voluptate dolorem et velit.",
+               "text": "Repudiandae et amet numqus non.",
+               "story_id": 10,
+               "story_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+               "related_news": [5435,2345,3654,4674],
+               "related_video_articles": [3451,2435,3543,4654],
+               "related_articles": [2341,2432,3565,4768],
+               "related_galleries": [1775,6782,5763,4676],
+               "video_src": "http:\/\/path.com",
+               "remove_after_36": false,
+               "last_edit_by": "ultrices.a@nonjusto.ca",
+               "created_by": "millie.zieme@example.net",
+               "country_top": false,
+               "created": 634912200,
+               "updated": 634912200,
+               "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+               "img_title": "dolor",
+               "img_alt": "Error quod cum sunt rem. Nobis maioreem.",
+               "supertag": 16,
+               "copyright_origin": "Saepe aut qui eum beatae delectus. Aum sit magnam.",
+               "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+               "copyright_link": "Et possimus quas consequatur qui optio. Maxime abo.",
+               "geotag": 0,
+               "branches": [16],
+               "tags": [],
+               "last_edit_date": 634912200,
+               "last_edit_time": 634912200,
+               "last_edit_video_by": "ultrices.a@nonjusto.ca",
+               "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+                },
+                  "12745" : {
+                    "id": 12745,
+                     "status": "active",
+               "views": 1885,
+               "author": "Prof. Ben Renner II",
+               "main_center": false,
+               "main_top": false,
+               "rubric_top": false,
+               "lightning": false,
+               "promo": false,
+               "embargo": 634912200,
+               "title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+               "seo_title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+               "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderRerum sed atque voluptate dolorem et velit.",
+               "text": "Repudiandae et amet numqus non.",
+               "story_id": 10,
+               "story_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+               "related_news": [5435,2345,3654,4674],
+               "related_video_articles": [3451,2435,3543,4654],
+               "related_articles": [2341,2432,3565,4768],
+               "related_galleries": [1775,6782,5763,4676],
+               "video_src": "http:\/\/path.com",
+               "remove_after_36": false,
+               "last_edit_by": "ultrices.a@nonjusto.ca",
+               "created_by": "millie.zieme@example.net",
+               "country_top": false,
+               "created": 634912200,
+               "updated": 634912200,
+               "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+               "img_title": "dolor",
+               "img_alt": "Error quod cum sunt rem. Nobis maioreem.",
+               "supertag": 16,
+               "copyright_origin": "Saepe aut qui eum beatae delectus. Aum sit magnam.",
+               "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+               "copyright_link": "Et possimus quas consequatur qui optio. Maxime abo.",
+               "geotag": 0,
+               "branches": [16],
+               "tags": [],
+               "last_edit_date": 634912200,
+               "last_edit_time": 634912200,
+               "last_edit_video_by": "ultrices.a@nonjusto.ca",
+               "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+                },
+                  "12746" : {
+                    "id": 12745,
+                     "status": "active",
+               "views": 1885,
+               "author": "Prof. Ben Renner II",
+               "main_center": false,
+               "main_top": false,
+               "rubric_top": false,
+               "lightning": false,
+               "promo": false,
+               "embargo": 634912200,
+               "title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+               "seo_title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+               "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderRerum sed atque voluptate dolorem et velit.",
+               "text": "Repudiandae et amet numqus non.",
+               "story_id": 10,
+               "story_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+               "related_news": [5435,2345,3654,4674],
+               "related_video_articles": [3451,2435,3543,4654],
+               "related_articles": [2341,2432,3565,4768],
+               "related_galleries": [1775,6782,5763,4676],
+               "video_src": "http:\/\/path.com",
+               "remove_after_36": false,
+               "last_edit_by": "ultrices.a@nonjusto.ca",
+               "created_by": "millie.zieme@example.net",
+               "country_top": false,
+               "created": 634912200,
+               "updated": 634912200,
+               "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+               "img_title": "dolor",
+               "img_alt": "Error quod cum sunt rem. Nobis maioreem.",
+               "supertag": 16,
+               "copyright_origin": "Saepe aut qui eum beatae delectus. Aum sit magnam.",
+               "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+               "copyright_link": "Et possimus quas consequatur qui optio. Maxime abo.",
+               "geotag": 0,
+               "branches": [16],
+               "tags": [],
+               "last_edit_date": 634912200,
+               "last_edit_time": 634912200,
+               "last_edit_video_by": "ultrices.a@nonjusto.ca",
+               "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+                }
+                },
+                "meta": {
+                    "count": "3",
+                    "moreAhead": "false",
+                    "moreBehind": "false"
+                }
+            }
+
+### ✔ Создать новость [POST /news/add]
+
+Получает JSON, содержащий поля для модели.
+
++ Request (application/json)
+
+        {
+               "status": "inactive",
+               "views": 1885,
+               "author": "Prof. Ben Renner II",
+               "main_center": false,
+               "main_top": false,
+               "rubric_top": false,
+               "lightning": false,
+               "promo": false,
+               "embargo": 634912200,
+               "title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+               "seo_title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+               "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderRerum sed atque voluptate dolorem et velit.",
+               "text": "Repudiandae et amet numqus non.",
+               "story_id": 10,
+               "story_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+               "related_news": [5435,2345,3654,4674],
+               "related_video_articles": [3451,2435,3543,4654],
+               "related_articles": [2341,2432,3565,4768],
+               "related_galleries": [1775,6782,5763,4676],
+               "video_src": "http:\/\/path.com",
+               "remove_after_36": false,
+               "last_edit_by": "ultrices.a@nonjusto.ca",
+               "created_by": "millie.zieme@example.net",
+               "country_top": false,
+               "created": 634912200,
+               "updated": 634912200,
+               "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+               "img_title": "dolor",
+               "img_alt": "Error quod cum sunt rem. Nobis maioreem.",
+               "supertag": 16,
+               "copyright_origin": "Saepe aut qui eum beatae delectus. Aum sit magnam.",
+               "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+               "copyright_link": "Et possimus quas consequatur qui optio. Maxime abo.",
+               "geotag": 0,
+               "branches": [16],
+               "tags": [],
+               "last_edit_date": 634912200,
+               "last_edit_time": 634912200,
+               "last_edit_video_by": "ultrices.a@nonjusto.ca",
+               "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+            }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /news/12
+
+    + Body
+
+            {
+                "success": {
+                    "id": "12",
+                    "status": "inactive",
+                   "views": 1885,
+                   "author": "Prof. Ben Renner II",
+                   "main_center": false,
+                   "main_top": false,
+                   "rubric_top": false,
+                   "lightning": false,
+                   "promo": false,
+                   "embargo": 634912200,
+                   "title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+                   "seo_title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+                   "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderRerum sed atque voluptate dolorem et velit.",
+                   "text": "Repudiandae et amet numqus non.",
+                   "story_id": 10,
+                   "story_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+                   "related_news": [5435,2345,3654,4674],
+                   "related_video_articles": [3451,2435,3543,4654],
+                   "related_articles": [2341,2432,3565,4768],
+                   "related_galleries": [1775,6782,5763,4676],
+                   "video_src": "http:\/\/path.com",
+                   "remove_after_36": false,
+                   "last_edit_by": "ultrices.a@nonjusto.ca",
+                   "created_by": "millie.zieme@example.net",
+                   "country_top": false,
+                   "created": 634912200,
+                   "updated": 634912200,
+                   "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+                   "img_title": "dolor",
+                   "img_alt": "Error quod cum sunt rem. Nobis maioreem.",
+                   "supertag": 16,
+                   "copyright_origin": "Saepe aut qui eum beatae delectus. Aum sit magnam.",
+                   "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+                   "copyright_link": "Et possimus quas consequatur qui optio. Maxime abo.",
+                   "geotag": 0,
+                   "branches": [16],
+                   "tags": [],
+                   "last_edit_date": 634912200,
+                   "last_edit_time": 634912200,
+                   "last_edit_video_by": "ultrices.a@nonjusto.ca",
+                   "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+                },
+                "error": {
+                    "state": 'error state',
+                    "message": 'error message'
+                }
+            }
+            
+### ✔ Создать новость со связанными моделями [POST /news/add/related]
+
+Получает JSON, содержащий поля для модели.
+
++ Request (application/json)
+
+        {
+                    "status": "inactive",
+                   "views": 1885,
+                   "author": "Prof. Ben Renner II",
+                   "main_center": false,
+                   "main_top": false,
+                   "rubric_top": false,
+                   "lightning": false,
+                   "promo": false,
+                   "embargo": 634912200,
+                   "title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+                   "seo_title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+                   "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderRerum sed atque voluptate dolorem et velit.",
+                   "text": "Repudiandae et amet numqus non.",
+                   "story_id": 10,
+                   "story_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+                   "related_news": [5435,2345,3654,4674],
+                   "related_video_articles": [3451,2435,3543,4654],
+                   "related_articles": [2341,2432,3565,4768],
+                   "related_galleries": [1775,6782,5763,4676],
+                   "video_src": "http:\/\/path.com",
+                   "remove_after_36": false,
+                   "last_edit_by": "ultrices.a@nonjusto.ca",
+                   "created_by": "millie.zieme@example.net",
+                   "country_top": false,
+                   "created": 634912200,
+                   "updated": 634912200,
+                   "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+                   "img_title": "dolor",
+                   "img_alt": "Error quod cum sunt rem. Nobis maioreem.",
+                   "supertag": 16,
+                   "copyright_origin": "Saepe aut qui eum beatae delectus. Aum sit magnam.",
+                   "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+                   "copyright_link": "Et possimus quas consequatur qui optio. Maxime abo.",
+                   "geotag": 0,
+                   "branches": [16],
+                   "tags": [],
+                   "last_edit_date": 634912200,
+                   "last_edit_time": 634912200,
+                   "last_edit_video_by": "ultrices.a@nonjusto.ca",
+                   "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+        }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /news/12
+
+    + Body
+
+            {
+                   "id": "12",
+                    "status": "inactive",
+                   "views": 1885,
+                   "author": "Prof. Ben Renner II",
+                   "main_center": false,
+                   "main_top": false,
+                   "rubric_top": false,
+                   "lightning": false,
+                   "promo": false,
+                   "embargo": 634912200,
+                   "title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+                   "seo_title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+                   "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderRerum sed atque voluptate dolorem et velit.",
+                   "text": "Repudiandae et amet numqus non.",
+                   "story_id": 10,
+                   "story_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+                   "related_news": [5435,2345,3654,4674],
+                   "related_video_articles": [3451,2435,3543,4654],
+                   "related_articles": [2341,2432,3565,4768],
+                   "related_galleries": [1775,6782,5763,4676],
+                   "video_src": "http:\/\/path.com",
+                   "remove_after_36": false,
+                   "last_edit_by": "ultrices.a@nonjusto.ca",
+                   "created_by": "millie.zieme@example.net",
+                   "country_top": false,
+                   "created": 634912200,
+                   "updated": 634912200,
+                   "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+                   "img_title": "dolor",
+                   "img_alt": "Error quod cum sunt rem. Nobis maioreem.",
+                   "supertag": 16,
+                   "copyright_origin": "Saepe aut qui eum beatae delectus. Aum sit magnam.",
+                   "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+                   "copyright_link": "Et possimus quas consequatur qui optio. Maxime abo.",
+                   "geotag": 0,
+                   "branches": [16],
+                   "tags": [],
+                   "last_edit_date": 634912200,
+                   "last_edit_time": 634912200,
+                   "last_edit_video_by": "ultrices.a@nonjusto.ca",
+                   "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+            }
+
+### ✔ Изменить новость [PUT /news/update]
+
+Получает JSON, содержащий поля для модели.
+
++ Request (application/json)
+
+        {
+                "id": 12744,
+                "status": "inactive",
+                   "views": 1885,
+                   "author": "Prof. Ben Renner II",
+                   "main_center": false,
+                   "main_top": false,
+                   "rubric_top": false,
+                   "lightning": false,
+                   "promo": false,
+                   "embargo": 634912200,
+                   "title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+                   "seo_title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+                   "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderRerum sed atque voluptate dolorem et velit.",
+                   "text": "Repudiandae et amet numqus non.",
+                   "story_id": 10,
+                   "story_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+                   "related_news": [5435,2345,3654,4674],
+                   "related_video_articles": [3451,2435,3543,4654],
+                   "related_articles": [2341,2432,3565,4768],
+                   "related_galleries": [1775,6782,5763,4676],
+                   "video_src": "http:\/\/path.com",
+                   "remove_after_36": false,
+                   "last_edit_by": "ultrices.a@nonjusto.ca",
+                   "created_by": "millie.zieme@example.net",
+                   "country_top": false,
+                   "created": 634912200,
+                   "updated": 634912200,
+                   "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+                   "img_title": "dolor",
+                   "img_alt": "Error quod cum sunt rem. Nobis maioreem.",
+                   "supertag": 16,
+                   "copyright_origin": "Saepe aut qui eum beatae delectus. Aum sit magnam.",
+                   "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+                   "copyright_link": "Et possimus quas consequatur qui optio. Maxime abo.",
+                   "geotag": 0,
+                   "branches": [16],
+                   "tags": [],
+                   "last_edit_date": 634912200,
+                   "last_edit_time": 634912200,
+                   "last_edit_video_by": "ultrices.a@nonjusto.ca",
+                   "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+            }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /news/12
+
+    + Body
+
+               {
+                    "success": {
+                        "id": "12744"
+                    },
+                    "error": {
+                        "state": 'error state',
+                        "message": 'error message'
+                    }
+                }
+
+### ✔ Изменить новость [PUT /news/update/related]
+
+Получает JSON, содержащий поля для модели.
+
++ Request (application/json)
+
+        {
+                "id": 12744,
+                "status": "inactive",
+                   "views": 1885,
+                   "author": "Prof. Ben Renner II",
+                   "main_center": false,
+                   "main_top": false,
+                   "rubric_top": false,
+                   "lightning": false,
+                   "promo": false,
+                   "embargo": 634912200,
+                   "title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+                   "seo_title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+                   "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderRerum sed atque voluptate dolorem et velit.",
+                   "text": "Repudiandae et amet numqus non.",
+                   "story_id": 10,
+                   "story_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+                   "related_news": [5435,2345,3654,4674],
+                   "related_video_articles": [3451,2435,3543,4654],
+                   "related_articles": [2341,2432,3565,4768],
+                   "related_galleries": [1775,6782,5763,4676],
+                   "video_src": "http:\/\/path.com",
+                   "remove_after_36": false,
+                   "last_edit_by": "ultrices.a@nonjusto.ca",
+                   "created_by": "millie.zieme@example.net",
+                   "country_top": false,
+                   "created": 634912200,
+                   "updated": 634912200,
+                   "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+                   "img_title": "dolor",
+                   "img_alt": "Error quod cum sunt rem. Nobis maioreem.",
+                   "supertag": 16,
+                   "copyright_origin": "Saepe aut qui eum beatae delectus. Aum sit magnam.",
+                   "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+                   "copyright_link": "Et possimus quas consequatur qui optio. Maxime abo.",
+                   "geotag": 0,
+                   "branches": [16],
+                   "tags": [],
+                   "last_edit_date": 634912200,
+                   "last_edit_time": 634912200,
+                   "last_edit_video_by": "ultrices.a@nonjusto.ca",
+                   "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+            }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /news/12
+
+    + Body
+
+               {
+                    "id": 12744,
+                    "status": "inactive",
+                   "views": 1885,
+                   "author": "Prof. Ben Renner II",
+                   "main_center": false,
+                   "main_top": false,
+                   "rubric_top": false,
+                   "lightning": false,
+                   "promo": false,
+                   "embargo": 634912200,
+                   "title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+                   "seo_title": "Placeat dolorem dolor autuisquam blanditiis quo.",
+                   "advert": "Culpa praesentium tenetur facere in. Culpa reprehenderRerum sed atque voluptate dolorem et velit.",
+                   "text": "Repudiandae et amet numqus non.",
+                   "story_id": 10,
+                   "story_title": "ercitationem. Tempora voluptate iste laboriosam neque non asperiores.",
+                   "related_news": [5435,2345,3654,4674],
+                   "related_video_articles": [3451,2435,3543,4654],
+                   "related_articles": [2341,2432,3565,4768],
+                   "related_galleries": [1775,6782,5763,4676],
+                   "video_src": "http:\/\/path.com",
+                   "remove_after_36": false,
+                   "last_edit_by": "ultrices.a@nonjusto.ca",
+                   "created_by": "millie.zieme@example.net",
+                   "country_top": false,
+                   "created": 634912200,
+                   "updated": 634912200,
+                   "images": ["https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg","https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/85\/Smiley.svg"],
+                   "img_title": "dolor",
+                   "img_alt": "Error quod cum sunt rem. Nobis maioreem.",
+                   "supertag": 16,
+                   "copyright_origin": "Saepe aut qui eum beatae delectus. Aum sit magnam.",
+                   "copyright_author": "Voluptatem veniam quia perspiciatis doloribus voluptatem qui. Qui tempora id ut quas quae iure dicta.",
+                   "copyright_link": "Et possimus quas consequatur qui optio. Maxime abo.",
+                   "geotag": 0,
+                   "branches": [16],
+                   "tags": [],
+                   "last_edit_date": 634912200,
+                   "last_edit_time": 634912200,
+                   "last_edit_video_by": "ultrices.a@nonjusto.ca",
+                   "last_edit_photo_by": "ultrices.a@nonjusto.ca"
+                }
+
+## Сюжеты Topic [/topic]
+
+### Получить сюжет по id [GET /topic/{model}]
+
++ Parameters
+
+    + model: 12 (number) - id требуемой новости
+
++ Response 200 (application/json)
+
+            {
+                "topicId": "12",
+                "createdAt": "31-12-2015 09:00",
+                "title": "Самая худшая новость",
+                "text": "Новости хуже Вы еще не встречали",
+                "publishTime": "01-01-2016 09:00"
+            }
+            
+### Поиск по заголовку [POST /topic/search]
+
++ Request (application/json)
+
+        {
+           "query": "Brexit"
+        }
+
++ Response 200 (application/json)
+
+            "3" : {
+                "id": "3",
+                "title": "Brexit",
+                "priority": 2,
+                "created_at": 1467280326861,
+                "deleted": false
+            }
+
+### Получить массив сюжетов [GET /topic/{limit}/{offset}]
+
++ Parameters
+
+    + limit: 10 (number) - Лимит новостей
+    + offset: 0 (number) - Смещение новостей
+
++ Response 200 (application/json)
+
+            {
+                "data": [
+                    "1": {
+                                "id": "1",
+                                "title": "Визит Путина в Китай",
+                                "priority": 1,
+                                "created": 1467280326861,
+                                "updated": 1467280326861,
+                                "deleted": false
+                            },
+                            "2": {
+                                "id": "2",
+                                "title": 'Дело против Никиты Белых',
+                                "priority": 2,
+                                "created": 1467280326861,
+                                "updated": 1467280326861,
+                                "deleted": true
+                            },
+                            "3": {
+                                "id": "3",
+                                "title": "Brexit",
+                                "priority": 3,
+                                "created": 1467280326861,
+                                "updated": 1467280326861,
+                                "deleted": false
+                            },
+                            "4": {
+                                "id": "4",
+                                "title": "Гибель детей в Карелии",
+                                "priority": 4,
+                                "created": 1467280326861,
+                                "updated": 1467280326861,
+                                "deleted": false
+                            },
+                            "5": {
+                                "id": "5",
+                                "title": "Саммит ШОС",
+                                "priority": 4,
+                                "created": 1467280326861,
+                                "updated": 1467280326861,
+                                "deleted": true
+                            },
+                            "6": {
+                                "id": "6",
+                                "title": "Гости эфира",
+                                "priority": 4,
+                                "created": 1467280326861,
+                                "updated": 1467280326861,
+                                "deleted": true
+                            },
+                            "7": {
+                                "id": "7",
+                                "title": "Большое интервью",
+                                "priority": 4,
+                                "created": 1467280326861,
+                                "updated": 1467280326861,
+                                "deleted": false
+                            },
+                            "8": {
+                                "id": "8",
+                                "title": "ЕВРО-2016",
+                                "priority": 4,
+                                "created": 1467280326861,
+                                "updated": 1467280326861,
+                                "deleted": true
+                            }
+                ],
+                "meta": {
+                    "count": "3",
+                    "moreAhead": "false",
+                    "moreBehind": "false"
+                }
+            }
+
+### Создать сюжет [POST /topic/add]
+
+Получает JSON, содержащий поля для модели.
+
++ Request (application/json)
+
+        {
+            "title": 'Дело против Никиты Белых',
+            "priority": 2,
+            "created": null,
+            "updated": null,
+            "deleted": false
+        }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /topic/12
+
+    + Body
+
+            {
+                "id": "2",
+                "title": 'Дело против Никиты Белых',
+                "priority": 2,
+                "created": 1467280326861,
+                "updated": 1467280326861,
+                "deleted": false
+            }
+
+### Изменить сюжет [PUT /topic/update]
+
+Получает JSON, содержащий поля для модели.
+
++ Request (application/json)
+
+            {
+                "id": "1",
+                "title": "Визит Путина в Китай",
+                "priority": 1,
+                "created": 1467280326861,
+                "updated": 1467280326861,
+                "deleted": false
+            }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /topic/12
+
+    + Body
+
+            {
+                "id": "1",
+                "title": "Визит Путина в Китай",
+                "priority": 1,
+                "created": 1467280326861,
+                "updated": 1467280326861,
+                "deleted": false
+            }
+
+## Врезки Incut [/incut]
+
+### Получить врезку по id [GET /incut/{id}]
+
++ Parameters
+
+    + id: 12 (number) - id требуемой  новости
+
++ Response 200 (application/json)
+
+            {
+                "id": "12",
+                "createdAt": "31-12-2015 09:00",
+                "title": "Самая худшая новость",
+                "text": "Новости хуже Вы еще не встречали",
+                "publishTime": "01-01-2016 09:00"
+            }
+
+### Получить массив врезок [GET /incut/{limit}/{offset}]
+
++ Parameters
+
+    + limit: 10 (number) - Лимит новостей
+    + offset: 0 (number) - Смещение новостей
+
++ Response 200 (application/json)
+
+            {
+                "data": [
+                    {
+                        "id": "11",
+                        "createdAt": "31-12-2015 09:00",
+                        "title": "Самая лучшая новость",
+                        "text": "Новости лучше Вы еще не встречали",
+                        "publishTime": "01-01-2016 09:00"
+                    },
+                    {
+                        "id": "12",
+                        "createdAt": "31-12-2015 09:00",
+                        "title": "Самая лучшая новость",
+                        "text": "Новости лучше Вы еще не встречали",
+                        "publishTime": "01-01-2016 09:00"
+                    },
+                    {
+                        "id": "13",
+                        "createdAt": "31-12-2015 09:00",
+                        "title": "Самая лучшая новость",
+                        "text": "Новости лучше Вы еще не встречали",
+                        "publishTime": "01-01-2016 09:00"
+                    }
+                ],
+                "meta": {
+                    "count": "3",
+                    "moreAhead": "false",
+                    "moreBehind": "false"
+                }
+            }
+            
+### Получить врезки к статье, новости, фотоленте и видеосюжету [GET /incut/all]
+
+Возвращает массив существующих врезок
+
++ Response 200 (application/json)
+            
+        [
+            [
+                'Секс взамен на «зачет»',
+                '<div><div class="mm_test_content"><a href="http://mir24.tv/news/society/13929546"><img src="http://stc01.mir24.tv/media/images/original/original14577321.jpg"></a><div class="mm_test_title"><a href="http://mir24.tv/news/society/13929546"> На что идут студенты ради учебы в вузе </a></div></div></div>'
+            ],
+            [
+                'Кто ответит за гибель детей?',
+                '<div id="test_inner_banner"><div class="mm_test_header">Трагедия в Карелии</div><div class="mm_test_content"><a href="http://mir24.tv/news/incidentes/14594487"><img src="http://stc01.mir24.tv/media/images/original/original14610711.jpg"></a><div class="mm_test_title"><a href="http://mir24.tv/news/incidentes/14594487">Кто ответит за гибель детей?</a></div></div></div>'
+            ]
+        ]
+
+### Создать врезку [POST /incut/add]
+
+Получает JSON, содержащий поля для модели.
+
++ Request (application/json)
+
+        {
+            "title": "Самая лучшая новость",
+            "text": "Новости лучше Вы еще не встречали",
+            "publishTime": "01-01-2016 09:00"
+        }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /incut/12
+
+    + Body
+
+            {
+                "id": "12",
+                "createdAt": "31-12-2015 09:00",
+                "title": "Самая лучшая новость",
+                "text": "Новости лучше Вы еще не встречали",
+                "publishTime": "01-01-2016 09:00"
+            }
+
+### Изменить врезку [PUT /incut/update]
+
+Получает JSON, содержащий поля для модели.
+
++ Request (application/json)
+
+        {
+            "id": "12",
+            "title": "Самая худшая новость",
+            "text": "Новости хуже Вы еще не встречали",
+            "publishTime": "01-01-2016 09:00"
+        }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /incut/12
+
+    + Body
+
+            {
+                "id": "12",
+                "createdAt": "31-12-2015 09:00",
+                "title": "Самая худшая новость",
+                "text": "Новости хуже Вы еще не встречали",
+                "publishTime": "01-01-2016 09:00"
+            }
